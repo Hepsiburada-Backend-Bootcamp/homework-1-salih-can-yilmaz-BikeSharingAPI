@@ -36,8 +36,8 @@ CREATE TABLE Session(
 	
 INSERT INTO User VALUES (NULL,"Can", "Yılmaz", "M", "1995-05-20", "2020-03-19", "canyilmaz999@gmail.com", "05551231212", 85.5);
 INSERT INTO User VALUES (NULL,"Mehmet", "Yılmaz", "M", "1995-05-20", "2020-03-19", "canyilmaz999@gmail.com", "05551231212", 85.5);
-INSERT INTO User VALUES (NULL,"Derya", "Yılmaz", "M", "1995-05-20", "2020-03-19", "canyilmaz999@gmail.com", "05551231212", 85.5);
-INSERT INTO User VALUES (NULL,"Ayşe", "Yılmaz", "M", "1995-05-20", "2020-03-19", "canyilmaz999@gmail.com", "05551231212", 85.5);
+INSERT INTO User VALUES (NULL,"Derya", "Yılmaz", "F", "1995-05-20", "2020-03-19", "canyilmaz999@gmail.com", "05551231212", 85.5);
+INSERT INTO User VALUES (NULL,"Ayşe", "Yılmaz", "F", "1995-05-20", "2020-03-19", "canyilmaz999@gmail.com", "05551231212", 85.5);
 
 INSERT INTO Session VALUES ("48fc25ed-bf80-4c40-9375-c59dca26528f", 1, "2020-03-19 14:00:00", "2020-03-19 15:00:00", "KARTAL", "PENDIK", 14.5, TRUE, 10.4,
 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad", 5456, 5);

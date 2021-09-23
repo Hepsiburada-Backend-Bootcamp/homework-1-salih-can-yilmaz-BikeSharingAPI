@@ -1,5 +1,6 @@
 ﻿using BikeSharingAPI.Enums;
 using BikeSharingAPI.Models;
+using BikeSharingAPI.Models.DTOs.Users;
 using BikeSharingAPI.Services;
 using BikeSharingAPI.Services.IServices;
 using Microsoft.AspNetCore.Http;
@@ -78,6 +79,22 @@ namespace BikeSharingAPI.Controllers
             {
                 return StatusCode(500);
             }
+        }
+
+        
+        [HttpPost]
+        public IActionResult CreateUser(
+            [FromBody]UserCreateDTO userCreateDTO
+            )
+        {
+            if(SQLiteService.Write<UserCreateDTO>("User", userCreateDTO))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(500);
+            }            
         }
     }
 }

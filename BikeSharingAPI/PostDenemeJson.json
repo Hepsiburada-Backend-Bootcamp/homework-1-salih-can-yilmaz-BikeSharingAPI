@@ -1,0 +1,10 @@
+{
+	"Name":"Osman",
+	"Surname":"Demir",
+	"Gender":"M",
+	"BirthDate":"2000-05-13",
+	"DateJoined":"2019-06-01",
+	"EMail":"odemir@gmail.com",
+	"PhoneNumber":01231231212,
+	"Balance":140.5 
+}
