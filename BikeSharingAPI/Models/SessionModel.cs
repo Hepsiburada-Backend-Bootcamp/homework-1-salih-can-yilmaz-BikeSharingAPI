@@ -1,9 +1,12 @@
+﻿using BikeSharingAPI.Enums;
 using System;
-using BikeSharingAPI.Enums;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace BikeSharingAPI.Models.DTOs.Sessions
+namespace BikeSharingAPI.Models
 {
-    public class SessionReadDTO
+    public class SessionModel
     {
         public Guid Id { get; set; }
         public DateTime StartDate { get; set; }

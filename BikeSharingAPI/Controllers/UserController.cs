@@ -1,4 +1,6 @@
 ﻿using BikeSharingAPI.Models;
+using BikeSharingAPI.Services;
+using BikeSharingAPI.Services.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,6 +14,11 @@ namespace BikeSharingAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly ISQLiteService SQLiteService;
+        public UserController(ISQLiteService sQLiteService)
+        {
+            this.SQLiteService = sQLiteService;
+        }
         /// <summary>
         /// Tum kullanicilarin bir listesini doner.
         /// </summary>

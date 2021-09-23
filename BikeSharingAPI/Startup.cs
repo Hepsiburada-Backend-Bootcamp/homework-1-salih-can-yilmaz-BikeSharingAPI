@@ -1,3 +1,5 @@
+using BikeSharingAPI.Services;
+using BikeSharingAPI.Services.IServices;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +34,8 @@ namespace BikeSharingAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BikeSharingAPI", Version = "v1" });
             });
+
+            services.AddScoped<ISQLiteService, SQLiteService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
