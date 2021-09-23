@@ -1,4 +1,5 @@
-﻿using BikeSharingAPI.Models;
+﻿using BikeSharingAPI.Enums;
+using BikeSharingAPI.Models;
 using BikeSharingAPI.Services;
 using BikeSharingAPI.Services.IServices;
 using Microsoft.AspNetCore.Http;
@@ -14,9 +15,12 @@ namespace BikeSharingAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly ILogService LogService;
         private readonly ISQLiteService SQLiteService;
-        public UserController(ISQLiteService sQLiteService)
+        
+        public UserController(ILogService logService, ISQLiteService sQLiteService)
         {
+            this.LogService = logService;
             this.SQLiteService = sQLiteService;
         }
         /// <summary>
@@ -28,6 +32,7 @@ namespace BikeSharingAPI.Controllers
         {
             try
             {
+                LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
                 List<UserModel> userModel = new List<UserModel>();
                 userModel = SQLiteService.GetAll<UserModel>("User");
 
