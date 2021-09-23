@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+*.Log
+BikeSharingAPI/Logs/2021-09-24.Log
