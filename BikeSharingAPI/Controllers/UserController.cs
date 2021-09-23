@@ -29,8 +29,16 @@ namespace BikeSharingAPI.Controllers
             try
             {
                 List<UserModel> userModel = new List<UserModel>();
+                userModel = SQLiteService.GetAll<UserModel>("User");
 
-                return Ok(SQLiteService.GetAll<UserModel>("User"));
+                if(userModel != null && userModel.Count > 0)
+                {
+                    return Ok(userModel);
+                }
+                else
+                {
+                    return NotFound(SharedData.MessageUsersNotFound);
+                }
             }
             catch (Exception ex)
             {
@@ -50,8 +58,16 @@ namespace BikeSharingAPI.Controllers
             try
             {
                 List<UserModel> userModel = new List<UserModel>();
+                userModel = SQLiteService.GetAll<UserModel>("User", $"id = {id}");
 
-                return Ok(SQLiteService.GetAll<UserModel>("User"));
+                if(userModel != null && userModel.Count > 0)
+                {
+                    return Ok(userModel);
+                }
+                else
+                {
+                    return NotFound(SharedData.MessageUserNotFound);
+                }
             }
             catch (Exception ex)
             {

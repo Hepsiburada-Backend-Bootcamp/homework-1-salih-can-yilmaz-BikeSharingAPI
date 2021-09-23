@@ -28,7 +28,16 @@ namespace BikeSharingAPI.Services
                 using (IDbConnection cnn = new SqliteConnection(GetConnectionString()))
                 {
                     cnn.Open();
-                    var output = cnn.Query<T>($"SELECT * FROM {fromTable} WHERE {whereCondition}");
+
+                    string query = $"SELECT * FROM {fromTable}";
+                    
+                    if(whereCondition != "")
+                    {
+                        query = query + $" WHERE {whereCondition}";
+                    }
+
+                    var output = cnn.Query<T>(query);
+
                     return output.ToList();
                 }
             }
