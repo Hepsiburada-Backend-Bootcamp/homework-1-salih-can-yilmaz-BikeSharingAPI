@@ -21,15 +21,15 @@ namespace BikeSharingAPI.Services
         {
             this.Configuration = configuration;
         }
-        public List<object> GetAll()
+        public List<object> GetAll(string fromTable)
         {
             try
             {
                 using (IDbConnection cnn = new SqliteConnection(GetConnectionString()))
                 {
                     cnn.Open();
-                    var output = cnn.Query<UserModel>("SELECT * FROM User", new DynamicParameters());
-                    return null;
+                    var output = cnn.Query<object>($"SELECT * FROM {fromTable}");
+                    return output.ToList();
                 }
             }
             catch (Exception ex)

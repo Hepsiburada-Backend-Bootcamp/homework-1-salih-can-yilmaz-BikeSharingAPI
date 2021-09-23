@@ -26,14 +26,7 @@ namespace BikeSharingAPI.Controllers
         [HttpGet]
         public IActionResult GetUserList()
         {
-            Dictionary<int, testUserModel> testData = new Dictionary<int, testUserModel>
-            {
-                [1] = new testUserModel("Ali"),
-                [2] = new testUserModel("Veli"),
-                [3] = new testUserModel("İsmail")
-            };
-
-            return Ok(testData);
+            return Ok(SQLiteService.GetAll("User"));
         }
 
         /// <summary>
@@ -45,20 +38,13 @@ namespace BikeSharingAPI.Controllers
         [HttpGet]
         public IActionResult GetUser([FromRoute]int id)
         {
-            Dictionary<int, testUserModel> testData = new Dictionary<int, testUserModel>
+            try
             {
-                [1] = new testUserModel("Ali"),
-                [2] = new testUserModel("Veli"),
-                [3] = new testUserModel("İsmail")
-            };
-
-            if(testData.TryGetValue(id, out var returnValue))
-            {
-                return Ok(returnValue);
+                return Ok(SQLiteService.GetAll("User"));
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound("User not found!");
+                return StatusCode(500);
             }
         }
     }
