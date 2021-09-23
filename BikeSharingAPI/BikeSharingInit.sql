@@ -5,32 +5,32 @@ DROP TABLE IF EXISTS Session;
 DROP TABLE IF EXISTS User;
 
 CREATE TABLE User(
-	Id 				INTEGER 		NOT NULL 
-									PRIMARY KEY 
-									AUTOINCREMENT,
+	Id 			INTEGER 	NOT NULL 
+						PRIMARY KEY 
+						AUTOINCREMENT,
 	Name 			NVARCHAR(50) 	NOT NULL,
 	Surname 		NVARCHAR(50) 	NOT NULL,
-	Gender 			CHARACTER,
+	Gender 		CHARACTER,
 	BirthDate 		DATETIME,
 	DateJoined 		DATETIME,
 	EMail 			NVARCHAR(50),
-	PhoneNumber 	NVARCHAR(15),
-	Balance 		NUMERIC
+	PhoneNumber 		NVARCHAR(15),
+	Balance 		NUMERIC 	DEFAULT 0
 	);
 	
 CREATE TABLE Session(
-	Id 				NVARCHAR(36) 	NOT NULL 
-									PRIMARY KEY,
-	UserId			INTEGER			REFERENCES User(Id) ON DELETE NO ACTION ON UPDATE CASCADE,
+	Id 			NVARCHAR(36) 	NOT NULL 
+						PRIMARY KEY,
+	UserId			INTEGER	REFERENCES User(Id) ON DELETE NO ACTION ON UPDATE CASCADE,
 	StartDate 		DATETIME,
 	EndDate 		DATETIME,
-	StartLocation	NVARCHAR(15),
+	StartLocation		NVARCHAR(15),
 	EndLocation		NVARCHAR(15),
-	Temperature		NUMERIC,
+	Temperature		NUMERIC	DEFAULT 20,
 	IsHoliday		BOOLEAN,
-	Cost			NUMERIC,
+	Cost			NUMERIC	DEFAULT 0,
 	UserComment		NVARCHAR(150),
-	TotalDistance	NUMERIC,
+	TotalDistance		NUMERIC,
 	UserRating		INTEGER
 	);
 	
