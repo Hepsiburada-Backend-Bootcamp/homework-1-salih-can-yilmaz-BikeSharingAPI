@@ -26,7 +26,16 @@ namespace BikeSharingAPI.Controllers
         [HttpGet]
         public IActionResult GetUserList()
         {
-            return Ok(SQLiteService.GetAll("User"));
+            try
+            {
+                List<UserModel> userModel = new List<UserModel>();
+
+                return Ok(SQLiteService.GetAll<UserModel>("User"));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
         }
 
         /// <summary>
@@ -40,7 +49,9 @@ namespace BikeSharingAPI.Controllers
         {
             try
             {
-                return Ok(SQLiteService.GetAll("User"));
+                List<UserModel> userModel = new List<UserModel>();
+
+                return Ok(SQLiteService.GetAll<UserModel>("User"));
             }
             catch (Exception ex)
             {

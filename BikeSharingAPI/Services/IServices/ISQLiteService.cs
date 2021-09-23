@@ -7,6 +7,6 @@ namespace BikeSharingAPI.Services.IServices
 {
     public interface ISQLiteService
     {
-        List<object> GetAll(string fromTable);
+        List<T> GetAll<T>(string fromTable);
     }
 }
