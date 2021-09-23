@@ -21,14 +21,14 @@ namespace BikeSharingAPI.Services
         {
             this.Configuration = configuration;
         }
-        public List<T> GetAll<T>(string fromTable)
+        public List<T> GetAll<T>(string fromTable, string whereCondition = "")
         {
             try
             {
                 using (IDbConnection cnn = new SqliteConnection(GetConnectionString()))
                 {
                     cnn.Open();
-                    var output = cnn.Query<T>($"SELECT * FROM {fromTable}");
+                    var output = cnn.Query<T>($"SELECT * FROM {fromTable} WHERE {whereCondition}");
                     return output.ToList();
                 }
             }
