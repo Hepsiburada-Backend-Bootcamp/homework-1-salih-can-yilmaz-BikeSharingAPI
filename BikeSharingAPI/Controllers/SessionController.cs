@@ -31,10 +31,10 @@ namespace BikeSharingAPI.Controllers
         [HttpGet]
         public IActionResult GetSessionList()
         {
+            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+
             try
             {
-                LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
-                
                 List<Session> sessionModel = SessionService.GetAll();
 
                 if (sessionModel != null && sessionModel.Count > 0)
@@ -61,6 +61,8 @@ namespace BikeSharingAPI.Controllers
         [HttpGet]
         public IActionResult GetSession([FromRoute] Guid id)
         {
+            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+
             try
             {
                 Session sessionModel = SessionService.GetById(id);
@@ -90,7 +92,9 @@ namespace BikeSharingAPI.Controllers
             [FromBody] Session session
             )
         {
-            if (SessionService.CreateSession(session))
+            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+
+            if (SessionService.Create(session))
             {
                 return NoContent();
             }
@@ -109,6 +113,8 @@ namespace BikeSharingAPI.Controllers
         [HttpPut]
         public IActionResult PutSession([FromBody]SessionUpdateDTO sessionUpdateDTO)
         {
+            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+
             return NoContent();
         }
 
@@ -120,6 +126,8 @@ namespace BikeSharingAPI.Controllers
         [HttpPatch]
         public IActionResult PatchSession([FromBody] SessionUpdateDTO sessionUpdateDTO)
         {
+            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+
             return NoContent();
         }
 
@@ -130,8 +138,12 @@ namespace BikeSharingAPI.Controllers
         /// <returns></returns>
         [HttpDelete]
         [Route("{id}")]
-        public IActionResult DeleteSession([FromRoute] int id)
+        public IActionResult DeleteSession([FromRoute] Guid id)
         {
+            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+
+            SessionService.Delete(id);
+
             return Ok();
         }
     }

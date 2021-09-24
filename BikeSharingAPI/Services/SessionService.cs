@@ -32,12 +32,26 @@ namespace BikeSharingAPI.Services
             }
         }
 
-        public bool CreateSession(Session session)
+        public bool Create(Session session)
         {
             using (var db = new SQLiteEFContext())
             {
                 db.Add(session);
                 db.SaveChanges();
+                return true;
+            }
+        }
+
+        public bool Delete(Guid id)
+        {
+            using (var db = new SQLiteEFContext())
+            {
+                Session session = new Session();
+                session.Id = id;
+
+                db.Remove(session);
+                db.SaveChanges();
+
                 return true;
             }
         }

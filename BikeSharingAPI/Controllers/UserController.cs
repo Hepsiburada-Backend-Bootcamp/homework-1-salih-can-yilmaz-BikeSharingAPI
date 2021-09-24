@@ -31,10 +31,10 @@ namespace BikeSharingAPI.Controllers
         [HttpGet]
         public IActionResult GetUserList()
         {
+            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+
             try
-            {
-                LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
-                
+            {                
                 List<User> userModel = UserService.GetAll();
 
                 if(userModel != null && userModel.Count > 0)
@@ -61,6 +61,7 @@ namespace BikeSharingAPI.Controllers
         [HttpGet]
         public IActionResult GetUser([FromRoute]int id)
         {
+            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
             try
             {
                 User userModel = UserService.GetById(id);
@@ -90,7 +91,9 @@ namespace BikeSharingAPI.Controllers
             [FromBody] User user
             )
         {
-            if(UserService.CreateUser(user))
+            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+
+            if (UserService.Create(user))
             {
                 return NoContent();
             }
@@ -109,6 +112,8 @@ namespace BikeSharingAPI.Controllers
         [HttpPut]
         public IActionResult PutUser([FromBody] UserUpdateDTO userUpdateDTO)
         {
+            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+
             return NoContent();
         }
 
@@ -120,6 +125,8 @@ namespace BikeSharingAPI.Controllers
         [HttpPatch]
         public IActionResult PatchUser([FromBody] UserUpdateDTO userUpdateDTO)
         {
+            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+
             return NoContent();
         }
 
@@ -132,6 +139,10 @@ namespace BikeSharingAPI.Controllers
         [Route("{id}")]
         public IActionResult DeleteUser([FromRoute] int id)
         {
+            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+
+            UserService.Delete(id);
+
             return Ok();
         }
     }

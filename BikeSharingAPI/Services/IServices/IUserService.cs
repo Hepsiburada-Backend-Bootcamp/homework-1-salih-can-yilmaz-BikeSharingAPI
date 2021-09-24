@@ -11,6 +11,7 @@ namespace BikeSharingAPI.Services.IServices
     {
         public List<User> GetAll();
         public User GetById(int id);
-        public bool CreateUser(User user);
+        public bool Create(User user);
+        public bool Delete(int id);
     }
 }
