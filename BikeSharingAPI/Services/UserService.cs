@@ -42,6 +42,16 @@ namespace BikeSharingAPI.Services
             }
         }
 
+        public bool Update(User user)
+        {
+            using (var db = new SQLiteEFContext())
+            {
+                db.Update(user);
+                db.SaveChanges();
+                return true;
+            }
+        }
+
         public bool Delete(int id)
         {
             using (var db = new SQLiteEFContext())

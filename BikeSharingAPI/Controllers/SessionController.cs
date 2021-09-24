@@ -111,11 +111,18 @@ namespace BikeSharingAPI.Controllers
         /// <param name="sessionUpdateDTO"></param>
         /// <returns>if succeeds 204; if fails 400 or 500</returns>
         [HttpPut]
-        public IActionResult PutSession([FromBody]SessionUpdateDTO sessionUpdateDTO)
+        public IActionResult PutSession([FromBody]Session sessionUpdateDTO)
         {
             LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            return NoContent();
+            if (SessionService.Update(sessionUpdateDTO))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
         }
 
         /// <summary>
@@ -124,9 +131,18 @@ namespace BikeSharingAPI.Controllers
         /// <param name="sessionUpdateDTO"></param>
         /// <returns>if succeeds 204; if fails 400 or 500</returns>
         [HttpPatch]
-        public IActionResult PatchSession([FromBody] SessionUpdateDTO sessionUpdateDTO)
+        public IActionResult PatchSession([FromBody] Session sessionUpdateDTO)
         {
             LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+
+            if (SessionService.Update(sessionUpdateDTO))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
 
             return NoContent();
         }

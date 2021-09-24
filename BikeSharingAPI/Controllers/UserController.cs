@@ -110,11 +110,18 @@ namespace BikeSharingAPI.Controllers
         /// <param name="userUpdateDTO"></param>
         /// <returns>if succeeds 204; if fails 400 or 500</returns>
         [HttpPut]
-        public IActionResult PutUser([FromBody] UserUpdateDTO userUpdateDTO)
+        public IActionResult PutUser([FromBody] User userUpdateDTO)
         {
             LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            return NoContent();
+            if(UserService.Update(userUpdateDTO))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
         }
 
         /// <summary>
@@ -123,11 +130,18 @@ namespace BikeSharingAPI.Controllers
         /// <param name="userUpdateDTO"></param>
         /// <returns>if succeeds 204; if fails 400 or 500</returns>
         [HttpPatch]
-        public IActionResult PatchUser([FromBody] UserUpdateDTO userUpdateDTO)
+        public IActionResult PatchUser([FromBody] User userUpdateDTO)
         {
             LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            return NoContent();
+            if (UserService.Update(userUpdateDTO))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
         }
 
         /// <summary>
