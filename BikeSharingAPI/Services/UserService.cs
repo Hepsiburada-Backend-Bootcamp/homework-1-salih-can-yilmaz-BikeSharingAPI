@@ -24,6 +24,14 @@ namespace BikeSharingAPI.Services
             }
         }
 
+        public List<User> GetAll(Func<User, bool> predicate)
+        {
+            using (var db = new SQLiteEFContext())
+            {
+                return db.Users.Where(predicate).ToList();
+            }
+        }
+
         public User GetById(int id)
         {
             using (var db = new SQLiteEFContext())

@@ -24,6 +24,14 @@ namespace BikeSharingAPI.Services
             }
         }
 
+        public List<Session> GetAll(Func<Session, bool> predicate)
+        {
+            using (var db = new SQLiteEFContext())
+            {
+                return db.Sessions.Where(predicate).ToList();
+            }
+        }
+
         public Session GetById(Guid id)
         {
             using (var db = new SQLiteEFContext())

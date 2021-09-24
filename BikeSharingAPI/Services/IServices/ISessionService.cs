@@ -9,10 +9,11 @@ namespace BikeSharingAPI.Services.IServices
 {
     public interface ISessionService
     {
-        public List<Session> GetAll();
-        public Session GetById(Guid id);
-        public bool Create(Session session);
-        public bool Update(Session session);
-        public bool Delete(Guid id);
+        List<Session> GetAll();
+        List<Session> GetAll(Func<Session, bool> predicate);
+        Session GetById(Guid id);
+        bool Create(Session session);
+        bool Update(Session session);
+        bool Delete(Guid id);
     }
 }

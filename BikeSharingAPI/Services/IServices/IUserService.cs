@@ -9,10 +9,11 @@ namespace BikeSharingAPI.Services.IServices
 {
     public interface IUserService
     {
-        public List<User> GetAll();
-        public User GetById(int id);
-        public bool Create(User user);
-        public bool Update(User user);
-        public bool Delete(int id);
+        List<User> GetAll();
+        List<User> GetAll(Func<User, bool> predicate);
+        User GetById(int id);
+        bool Create(User user);
+        bool Update(User user);
+        bool Delete(int id);
     }
 }
