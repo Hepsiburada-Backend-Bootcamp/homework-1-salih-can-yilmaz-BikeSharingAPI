@@ -5,39 +5,39 @@ DROP TABLE IF EXISTS Session;
 DROP TABLE IF EXISTS User;
 
 CREATE TABLE User(
-	Id 				INTEGER 		NOT NULL 
-									PRIMARY KEY 
-									AUTOINCREMENT,
+	Id 			INTEGER 	NOT NULL 
+						PRIMARY KEY 
+						AUTOINCREMENT,
 	Name 			NVARCHAR(50) 	NOT NULL,
 	Surname 		NVARCHAR(50) 	NOT NULL,
-	Gender 			CHARACTER,
+	Gender 		CHARACTER,
 	BirthDate 		DATETIME,
 	DateJoined 		DATETIME,
 	EMail 			NVARCHAR(50),
-	PhoneNumber 	NVARCHAR(15),
-	Balance 		NUMERIC
+	PhoneNumber 		NVARCHAR(15),
+	Balance 		NUMERIC 	DEFAULT 0
 	);
 	
 CREATE TABLE Session(
-	Id 				NVARCHAR(36) 	NOT NULL 
-									PRIMARY KEY,
-	UserId			INTEGER			REFERENCES User(Id) ON DELETE NO ACTION ON UPDATE CASCADE,
+	Id 			NVARCHAR(36) 	NOT NULL 
+						PRIMARY KEY,
+	UserId			INTEGER	REFERENCES User(Id) ON DELETE NO ACTION ON UPDATE CASCADE,
 	StartDate 		DATETIME,
 	EndDate 		DATETIME,
-	StartLocation	NVARCHAR(15),
+	StartLocation		NVARCHAR(15),
 	EndLocation		NVARCHAR(15),
-	Temperature		NUMERIC,
+	Temperature		NUMERIC	DEFAULT 20,
 	IsHoliday		BOOLEAN,
-	Cost			NUMERIC,
+	Cost			NUMERIC	DEFAULT 0,
 	UserComment		NVARCHAR(150),
-	TotalDistance	NUMERIC,
+	TotalDistance		NUMERIC,
 	UserRating		INTEGER
 	);
 	
 INSERT INTO User VALUES (NULL,"Can", "Yılmaz", "M", "1995-05-20", "2020-03-19", "canyilmaz999@gmail.com", "05551231212", 85.5);
 INSERT INTO User VALUES (NULL,"Mehmet", "Yılmaz", "M", "1995-05-20", "2020-03-19", "canyilmaz999@gmail.com", "05551231212", 85.5);
-INSERT INTO User VALUES (NULL,"Derya", "Yılmaz", "M", "1995-05-20", "2020-03-19", "canyilmaz999@gmail.com", "05551231212", 85.5);
-INSERT INTO User VALUES (NULL,"Ayşe", "Yılmaz", "M", "1995-05-20", "2020-03-19", "canyilmaz999@gmail.com", "05551231212", 85.5);
+INSERT INTO User VALUES (NULL,"Derya", "Yılmaz", "F", "1995-05-20", "2020-03-19", "canyilmaz999@gmail.com", "05551231212", 85.5);
+INSERT INTO User VALUES (NULL,"Ayşe", "Yılmaz", "F", "1995-05-20", "2020-03-19", "canyilmaz999@gmail.com", "05551231212", 85.5);
 
 INSERT INTO Session VALUES ("48fc25ed-bf80-4c40-9375-c59dca26528f", 1, "2020-03-19 14:00:00", "2020-03-19 15:00:00", "KARTAL", "PENDIK", 14.5, TRUE, 10.4,
 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad", 5456, 5);
