@@ -81,7 +81,11 @@ namespace BikeSharingAPI.Controllers
             }
         }
 
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userCreateDTO"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult CreateUser(
             [FromBody]UserCreateDTO userCreateDTO
@@ -95,6 +99,41 @@ namespace BikeSharingAPI.Controllers
             {
                 return StatusCode(500);
             }            
+        }
+
+        /// <summary>
+        /// Id ile eşleştirdiği kaydi verilen degerler ile veritabanında gunceller. Degeri belirtilmeyen
+        /// alanlara o alanlarin default degeri atanir.
+        /// </summary>
+        /// <param name="userUpdateDTO"></param>
+        /// <returns>if succeeds 204; if fails 400 or 500</returns>
+        [HttpPut]
+        public IActionResult PutUser([FromBody] UserUpdateDTO userUpdateDTO)
+        {
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Id ile eşleştirdiği kaydi verilen degerler ile veritabanında gunceller.
+        /// </summary>
+        /// <param name="userUpdateDTO"></param>
+        /// <returns>if succeeds 204; if fails 400 or 500</returns>
+        [HttpPatch]
+        public IActionResult PatchUser([FromBody] UserUpdateDTO userUpdateDTO)
+        {
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Id'si verilen User icin veritabanindan silme islemi yapar
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult DeleteUser([FromRoute] int id)
+        {
+            return Ok();
         }
     }
 }

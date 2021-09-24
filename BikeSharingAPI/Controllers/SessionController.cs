@@ -1,4 +1,5 @@
 ﻿using BikeSharingAPI.Models.DTOs.Sessions;
+using BikeSharingAPI.Services.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,9 +13,13 @@ namespace BikeSharingAPI.Controllers
     [ApiController]
     public class SessionController : ControllerBase
     {
-        public SessionController()
-        {
+        private readonly ILogService LogService;
+        private readonly ISQLiteService SQLiteService;
 
+        public SessionController(ILogService logService, ISQLiteService sQLiteService)
+        {
+            this.LogService = logService;
+            this.SQLiteService = sQLiteService;
         }
 
         /// <summary>
@@ -40,6 +45,26 @@ namespace BikeSharingAPI.Controllers
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sessionCreateDTO"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult CreateSession(
+            [FromBody] SessionCreateDTO sessionCreateDTO
+            )
+        {
+            if (SQLiteService.Write<SessionCreateDTO>("User", sessionCreateDTO))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+        }
+
+        /// <summary>
         /// Id ile eşleştirdiği kaydi verilen degerler ile veritabanında gunceller. Degeri belirtilmeyen
         /// alanlara o alanlarin default degeri atanir.
         /// </summary>
@@ -60,6 +85,18 @@ namespace BikeSharingAPI.Controllers
         public IActionResult PatchSession([FromBody] SessionUpdateDTO sessionUpdateDTO)
         {
             return NoContent();
+        }
+
+        /// <summary>
+        /// Id'si verilen Session icin veritabanindan silme islemi yapar
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Route("{id}")]
+        public IActionResult DeleteSession([FromRoute] int id)
+        {
+            return Ok();
         }
     }
 }
