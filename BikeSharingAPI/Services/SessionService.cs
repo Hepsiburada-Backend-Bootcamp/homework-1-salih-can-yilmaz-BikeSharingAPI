@@ -11,30 +11,35 @@ namespace BikeSharingAPI.Services
     public class SessionService : ISessionService
     {
         private readonly ILogService LogService;
-        private readonly ISQLiteService SQLiteService;
-        public SessionService(ILogService logService, ISQLiteService sQLiteService)
+        public SessionService(ILogService logService)
         {
             this.LogService = logService;
-            this.SQLiteService = sQLiteService;
         }
 
-        public List<SessionModel> GetAll()
+        public List<Session> GetAll()
         {
-            List<SessionModel> sessionModel = SQLiteService.GetAll<SessionModel>("Session");
-
-            return sessionModel;
+            using (var db = new SQLiteEFContext())
+            {
+                return db.Sessions.ToList();
+            }
         }
 
-        public List<SessionModel> GetAll(string whereCondition)
+        public Session GetById(Guid id)
         {
-            List<SessionModel> sessionModel = SQLiteService.GetAll<SessionModel>("Session", whereCondition);
-
-            return sessionModel;
+            using (var db = new SQLiteEFContext())
+            {
+                return db.Sessions.FirstOrDefault(session => session.Id == id);
+            }
         }
 
-        public bool CreateSession(SessionCreateDTO sessionCreateDTO)
+        public bool CreateSession(Session session)
         {
-            return SQLiteService.Write<SessionCreateDTO>("Session", sessionCreateDTO);
+            using (var db = new SQLiteEFContext())
+            {
+                db.Add(session);
+                db.SaveChanges();
+                return true;
+            }
         }
     }
 }

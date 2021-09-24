@@ -36,7 +36,8 @@ namespace BikeSharingAPI
             });
 
             services.AddScoped<ILogService, LogService>();
-            services.AddScoped<ISQLiteService, SQLiteService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ISessionService, SessionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

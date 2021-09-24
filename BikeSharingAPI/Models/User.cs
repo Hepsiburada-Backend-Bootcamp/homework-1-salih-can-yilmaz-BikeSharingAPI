@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BikeSharingAPI.Models
 {
-    public class UserModel
+    public class User
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -16,6 +16,6 @@ namespace BikeSharingAPI.Models
         public DateTime DateJoined { get; set; }
         public string EMail { get; set; }
         public string PhoneNumber { get; set; }
-        public double Balance { get; set; }
+        public float Balance { get; set; }
     }
 }

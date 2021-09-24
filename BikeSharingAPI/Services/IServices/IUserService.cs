@@ -9,8 +9,8 @@ namespace BikeSharingAPI.Services.IServices
 {
     public interface IUserService
     {
-        public List<UserModel> GetAll();
-        public List<UserModel> GetAll(string whereCondition);
-        public bool CreateUser(UserCreateDTO userCreateDTO);
+        public List<User> GetAll();
+        public User GetById(int id);
+        public bool CreateUser(User user);
     }
 }

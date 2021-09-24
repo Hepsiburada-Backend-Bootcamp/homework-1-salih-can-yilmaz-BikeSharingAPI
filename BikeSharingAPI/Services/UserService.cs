@@ -11,32 +11,35 @@ namespace BikeSharingAPI.Services
     public class UserService : IUserService
     {
         private readonly ILogService LogService;
-        private readonly ISQLiteService SQLiteService;
-        public UserService(ILogService logService, ISQLiteService sQLiteService)
+        public UserService(ILogService logService)
         {
             this.LogService = logService;
-            this.SQLiteService = sQLiteService;
         }
 
-        public List<UserModel> GetAll()
+        public List<User> GetAll()
         {
-            List<UserModel> userModel = new List<UserModel>();
-            userModel = SQLiteService.GetAll<UserModel>("User");
-
-            return userModel;
+            using (var db = new SQLiteEFContext())
+            {
+                return db.Users.ToList();
+            }
         }
 
-        public List<UserModel> GetAll(string whereCondition)
+        public User GetById(int id)
         {
-            List<UserModel> userModel = new List<UserModel>();
-            userModel = SQLiteService.GetAll<UserModel>("User", whereCondition);
-
-            return userModel;
+            using (var db = new SQLiteEFContext())
+            {
+                return db.Users.FirstOrDefault(user => user.Id == id);
+            }
         }
 
-        public bool CreateUser(UserCreateDTO userCreateDTO)
+        public bool CreateUser(User user)
         {
-            return SQLiteService.Write<UserCreateDTO>("User", userCreateDTO);
+            using (var db = new SQLiteEFContext())
+            {
+                db.Add(user);
+                db.SaveChanges();
+                return true;
+            }
         }
     }
 }

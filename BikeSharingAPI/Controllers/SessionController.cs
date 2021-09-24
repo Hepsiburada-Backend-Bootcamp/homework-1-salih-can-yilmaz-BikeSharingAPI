@@ -34,7 +34,8 @@ namespace BikeSharingAPI.Controllers
             try
             {
                 LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
-                List<SessionModel> sessionModel = SessionService.GetAll();
+                
+                List<Session> sessionModel = SessionService.GetAll();
 
                 if (sessionModel != null && sessionModel.Count > 0)
                 {
@@ -58,13 +59,13 @@ namespace BikeSharingAPI.Controllers
         /// <returns>Eger bulursa, session bilgileri json formatinda.</returns>
         [Route("{id}")]
         [HttpGet]
-        public IActionResult GetSession([FromRoute] int id)
+        public IActionResult GetSession([FromRoute] Guid id)
         {
             try
             {
-                List<SessionModel> sessionModel = SessionService.GetAll($"id = {id}");
+                Session sessionModel = SessionService.GetById(id);
 
-                if (sessionModel != null && sessionModel.Count > 0)
+                if (sessionModel != null)
                 {
                     return Ok(sessionModel);
                 }
@@ -86,10 +87,10 @@ namespace BikeSharingAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         public IActionResult CreateSession(
-            [FromBody] SessionCreateDTO sessionCreateDTO
+            [FromBody] Session session
             )
         {
-            if (SessionService.CreateSession(sessionCreateDTO))
+            if (SessionService.CreateSession(session))
             {
                 return NoContent();
             }

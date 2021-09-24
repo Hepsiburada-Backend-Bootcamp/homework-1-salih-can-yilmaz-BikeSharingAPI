@@ -34,7 +34,8 @@ namespace BikeSharingAPI.Controllers
             try
             {
                 LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
-                List<UserModel> userModel = UserService.GetAll();
+                
+                List<User> userModel = UserService.GetAll();
 
                 if(userModel != null && userModel.Count > 0)
                 {
@@ -62,9 +63,9 @@ namespace BikeSharingAPI.Controllers
         {
             try
             {
-                List<UserModel> userModel = UserService.GetAll($"id = {id}");
+                User userModel = UserService.GetById(id);
 
-                if(userModel != null && userModel.Count > 0)
+                if(userModel != null)
                 {
                     return Ok(userModel);
                 }
@@ -86,10 +87,10 @@ namespace BikeSharingAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         public IActionResult CreateUser(
-            [FromBody]UserCreateDTO userCreateDTO
+            [FromBody] User user
             )
         {
-            if(UserService.CreateUser(userCreateDTO))
+            if(UserService.CreateUser(user))
             {
                 return NoContent();
             }

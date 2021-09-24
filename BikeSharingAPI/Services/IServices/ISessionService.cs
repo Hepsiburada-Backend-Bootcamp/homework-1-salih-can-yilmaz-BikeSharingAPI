@@ -9,8 +9,8 @@ namespace BikeSharingAPI.Services.IServices
 {
     public interface ISessionService
     {
-        public List<SessionModel> GetAll();
-        public List<SessionModel> GetAll(string whereCondition);
-        public bool CreateSession(SessionCreateDTO sessionCreateDTO);
+        public List<Session> GetAll();
+        public Session GetById(Guid id);
+        public bool CreateSession(Session session);
     }
 }

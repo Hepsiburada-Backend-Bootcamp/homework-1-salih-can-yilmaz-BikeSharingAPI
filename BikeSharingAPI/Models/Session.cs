@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BikeSharingAPI.Models
 {
-    public class SessionModel
+    public class Session
     {
         public Guid Id { get; set; }
         public DateTime StartDate { get; set; }
