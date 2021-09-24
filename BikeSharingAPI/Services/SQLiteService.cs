@@ -50,7 +50,6 @@ namespace BikeSharingAPI.Services
                 LogService.Log(ex.Message);
                 return null;
             }
-            
         }
 
         public bool Write<T>(string tableName, T model, string whereCondition = "")
