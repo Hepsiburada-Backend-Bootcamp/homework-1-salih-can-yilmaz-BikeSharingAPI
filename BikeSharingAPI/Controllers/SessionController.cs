@@ -45,7 +45,7 @@ namespace BikeSharingAPI.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Body'den okudugu model ile yeni bir user yaratir.
         /// </summary>
         /// <param name="sessionCreateDTO"></param>
         /// <returns></returns>

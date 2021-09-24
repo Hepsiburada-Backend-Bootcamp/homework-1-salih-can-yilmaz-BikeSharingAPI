@@ -82,7 +82,7 @@ namespace BikeSharingAPI.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Body'den okudugu model ile yeni bir user yaratir.
         /// </summary>
         /// <param name="userCreateDTO"></param>
         /// <returns></returns>
