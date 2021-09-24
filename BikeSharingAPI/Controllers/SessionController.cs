@@ -1,7 +1,9 @@
-﻿using BikeSharingAPI.Enums;
+﻿using AutoMapper;
+using BikeSharingAPI.Enums;
 using BikeSharingAPI.Models;
 using BikeSharingAPI.Models.DTOs.Sessions;
 using BikeSharingAPI.Services.IServices;
+using BikeSharingAPI.Tools;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,13 +17,15 @@ namespace BikeSharingAPI.Controllers
     [ApiController]
     public class SessionController : ControllerBase
     {
-        private readonly ILogService LogService;
-        private readonly ISessionService SessionService;
+        private readonly ILogService _LogService;
+        private readonly ISessionService _SessionService;
+        private readonly IMapper _Mapper;
 
-        public SessionController(ILogService logService, ISessionService sessionService)
+        public SessionController(ILogService logService, ISessionService sessionService, IMapper mapper)
         {
-            this.LogService = logService;
-            this.SessionService = sessionService;
+            this._LogService = logService;
+            this._SessionService = sessionService;
+            this._Mapper = mapper;
         }
 
         /// <summary>
@@ -31,11 +35,11 @@ namespace BikeSharingAPI.Controllers
         [HttpGet]
         public IActionResult GetSessionList()
         {
-            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+            _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
             try
             {
-                List<Session> sessionModel = SessionService.GetAll();
+                List<Session> sessionModel = _SessionService.GetAll();
 
                 if (sessionModel != null && sessionModel.Count > 0)
                 {
@@ -61,11 +65,11 @@ namespace BikeSharingAPI.Controllers
         [HttpGet]
         public IActionResult GetSession([FromRoute] Guid id)
         {
-            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+            _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
             try
             {
-                Session sessionModel = SessionService.GetById(id);
+                Session sessionModel = _SessionService.GetById(id);
 
                 if (sessionModel != null)
                 {
@@ -83,18 +87,20 @@ namespace BikeSharingAPI.Controllers
         }
 
         /// <summary>
-        /// Body'den okudugu model ile yeni bir user yaratir.
+        /// Body'den okudugu model ile yeni bir session yaratir.
         /// </summary>
         /// <param name="sessionCreateDTO"></param>
         /// <returns></returns>
         [HttpPost]
         public IActionResult CreateSession(
-            [FromBody] Session session
+            [FromBody] SessionCreateDTO sessionCreateDTO
             )
         {
-            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+            _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            if (SessionService.Create(session))
+            Session session = _Mapper.Map<Session>(sessionCreateDTO);
+
+            if (_SessionService.Create(session))
             {
                 return NoContent();
             }
@@ -113,9 +119,11 @@ namespace BikeSharingAPI.Controllers
         [HttpPut]
         public IActionResult PutSession([FromBody]Session sessionUpdateDTO)
         {
-            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+            _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            if (SessionService.Update(sessionUpdateDTO))
+            Session session = _Mapper.Map<Session>(sessionUpdateDTO);
+
+            if (_SessionService.Update(session))
             {
                 return NoContent();
             }
@@ -131,11 +139,30 @@ namespace BikeSharingAPI.Controllers
         /// <param name="sessionUpdateDTO"></param>
         /// <returns>if succeeds 204; if fails 400 or 500</returns>
         [HttpPatch]
-        public IActionResult PatchSession([FromBody] Session sessionUpdateDTO)
+        public IActionResult PatchSession([FromBody] SessionUpdateDTO sessionUpdateDTO)
         {
-            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+            _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            if (SessionService.Update(sessionUpdateDTO))
+            Session session = _SessionService.GetById(sessionUpdateDTO.Id);
+
+            if (session == null)
+            {
+                return NotFound();
+            }
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<SessionUpdateDTO, Session>();
+                cfg.ForAllPropertyMaps(
+                    pm => pm.TypeMap.SourceType == typeof(SessionUpdateDTO),
+                        (pm, c) => c.MapFrom(new IgnoreNullResolver(), pm.SourceMember.Name));
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
+            session = iMapper.Map(sessionUpdateDTO, session);
+
+            if (_SessionService.Update(session))
             {
                 return NoContent();
             }
@@ -143,8 +170,6 @@ namespace BikeSharingAPI.Controllers
             {
                 return StatusCode(500);
             }
-
-            return NoContent();
         }
 
         /// <summary>
@@ -156,9 +181,9 @@ namespace BikeSharingAPI.Controllers
         [Route("{id}")]
         public IActionResult DeleteSession([FromRoute] Guid id)
         {
-            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+            _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            SessionService.Delete(id);
+            _SessionService.Delete(id);
 
             return Ok();
         }

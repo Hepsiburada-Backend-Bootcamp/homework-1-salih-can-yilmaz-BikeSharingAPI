@@ -35,6 +35,8 @@ namespace BikeSharingAPI
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BikeSharingAPI", Version = "v1" });
             });
 
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddScoped<ILogService, LogService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISessionService, SessionService>();

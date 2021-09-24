@@ -1,8 +1,10 @@
-﻿using BikeSharingAPI.Enums;
+﻿using AutoMapper;
+using BikeSharingAPI.Enums;
 using BikeSharingAPI.Models;
 using BikeSharingAPI.Models.DTOs.Users;
 using BikeSharingAPI.Services;
 using BikeSharingAPI.Services.IServices;
+using BikeSharingAPI.Tools;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -16,14 +18,17 @@ namespace BikeSharingAPI.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly ILogService LogService;
-        private readonly IUserService UserService;
+        private readonly ILogService _LogService;
+        private readonly IUserService _UserService;
+        private readonly IMapper _Mapper;
 
-        public UserController(ILogService logService, IUserService userService)
+        public UserController(ILogService logService, IUserService userService, IMapper mapper)
         {
-            this.LogService = logService;
-            this.UserService = userService;
+            this._LogService = logService;
+            this._UserService = userService;
+            this._Mapper = mapper;
         }
+
         /// <summary>
         /// Tum kullanicilarin bir listesini doner.
         /// </summary>
@@ -31,15 +36,17 @@ namespace BikeSharingAPI.Controllers
         [HttpGet]
         public IActionResult GetUserList()
         {
-            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+            _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
             try
             {                
-                List<User> userModel = UserService.GetAll();
+                List<User> userModel = _UserService.GetAll();
 
                 if(userModel != null && userModel.Count > 0)
                 {
-                    return Ok(userModel);
+                    List<UserReadDTO> userReadDTOs = _Mapper.Map<List<UserReadDTO>>(userModel);
+
+                    return Ok(userReadDTOs);
                 }
                 else
                 {
@@ -61,14 +68,16 @@ namespace BikeSharingAPI.Controllers
         [HttpGet]
         public IActionResult GetUser([FromRoute]int id)
         {
-            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+            _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
             try
             {
-                User userModel = UserService.GetById(id);
+                User userModel = _UserService.GetById(id);
 
                 if(userModel != null)
                 {
-                    return Ok(userModel);
+                    UserReadDTO userReadDTO = _Mapper.Map<UserReadDTO>(userModel);
+
+                    return Ok(userReadDTO);
                 }
                 else
                 {
@@ -77,6 +86,8 @@ namespace BikeSharingAPI.Controllers
             }
             catch (Exception ex)
             {
+                _LogService.Log(ex.Message, EnumLogLevel.ERROR);
+                
                 return StatusCode(500);
             }
         }
@@ -88,12 +99,14 @@ namespace BikeSharingAPI.Controllers
         /// <returns></returns>
         [HttpPost]
         public IActionResult CreateUser(
-            [FromBody] User user
+            [FromBody] UserCreateDTO userCreateDTO
             )
         {
-            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+            _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            if (UserService.Create(user))
+            User user = _Mapper.Map<User>(userCreateDTO);
+
+            if (_UserService.Create(user))
             {
                 return NoContent();
             }
@@ -110,11 +123,13 @@ namespace BikeSharingAPI.Controllers
         /// <param name="userUpdateDTO"></param>
         /// <returns>if succeeds 204; if fails 400 or 500</returns>
         [HttpPut]
-        public IActionResult PutUser([FromBody] User userUpdateDTO)
+        public IActionResult PutUser([FromBody] UserUpdateDTO userUpdateDTO)
         {
-            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+            _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            if(UserService.Update(userUpdateDTO))
+            User user = _Mapper.Map<User>(userUpdateDTO); 
+
+            if(_UserService.Update(user))
             {
                 return NoContent();
             }
@@ -130,11 +145,30 @@ namespace BikeSharingAPI.Controllers
         /// <param name="userUpdateDTO"></param>
         /// <returns>if succeeds 204; if fails 400 or 500</returns>
         [HttpPatch]
-        public IActionResult PatchUser([FromBody] User userUpdateDTO)
+        public IActionResult PatchUser([FromBody] UserUpdateDTO userUpdateDTO)
         {
-            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+            _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            if (UserService.Update(userUpdateDTO))
+            User user = _UserService.GetById(userUpdateDTO.Id);
+            
+            if(user == null)
+            {
+                return NotFound();
+            }
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<UserUpdateDTO, User>();
+                cfg.ForAllPropertyMaps(
+                    pm => pm.TypeMap.SourceType == typeof(UserUpdateDTO),
+                        (pm, c) => c.MapFrom(new IgnoreNullResolver(), pm.SourceMember.Name));
+            });
+            
+            IMapper iMapper = config.CreateMapper();
+
+            user = iMapper.Map(userUpdateDTO, user);
+
+            if (_UserService.Update(user))
             {
                 return NoContent();
             }
@@ -153,9 +187,9 @@ namespace BikeSharingAPI.Controllers
         [Route("{id}")]
         public IActionResult DeleteUser([FromRoute] int id)
         {
-            LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+            _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            UserService.Delete(id);
+            _UserService.Delete(id);
 
             return Ok();
         }
