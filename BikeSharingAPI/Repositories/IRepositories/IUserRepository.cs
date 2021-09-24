@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace BikeSharingAPI.Services.IServices
 {
-    public interface IUserService
+    public interface IUserRepository
     {
         List<User> GetAll();
-        List<User> GetAll(Func<User, bool> predicate);
+        List<User> GetAll(Func<User, bool> wherePredicate);
         User GetById(int id);
         bool Create(User user);
         bool Update(User user);

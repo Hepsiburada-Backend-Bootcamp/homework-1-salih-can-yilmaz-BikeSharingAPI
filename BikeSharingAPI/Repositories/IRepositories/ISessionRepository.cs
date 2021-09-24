@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BikeSharingAPI.Services.IServices
 {
-    public interface ISessionService
+    public interface ISessionRepository
     {
         List<Session> GetAll();
         List<Session> GetAll(Func<Session, bool> predicate);

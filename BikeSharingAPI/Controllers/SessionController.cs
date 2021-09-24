@@ -18,10 +18,10 @@ namespace BikeSharingAPI.Controllers
     public class SessionController : ControllerBase
     {
         private readonly ILogService _LogService;
-        private readonly ISessionService _SessionService;
+        private readonly ISessionRepository _SessionService;
         private readonly IMapper _Mapper;
 
-        public SessionController(ILogService logService, ISessionService sessionService, IMapper mapper)
+        public SessionController(ILogService logService, ISessionRepository sessionService, IMapper mapper)
         {
             this._LogService = logService;
             this._SessionService = sessionService;

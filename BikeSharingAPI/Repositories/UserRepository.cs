@@ -1,5 +1,5 @@
 ﻿using BikeSharingAPI.Models;
-using BikeSharingAPI.Models.DTOs.Sessions;
+using BikeSharingAPI.Models.DTOs.Users;
 using BikeSharingAPI.Services.IServices;
 using System;
 using System.Collections.Generic;
@@ -8,66 +8,66 @@ using System.Threading.Tasks;
 
 namespace BikeSharingAPI.Services
 {
-    public class SessionService : ISessionService
+    public class UserRepository : IUserRepository
     {
         private readonly ILogService LogService;
-        public SessionService(ILogService logService)
+        public UserRepository(ILogService logService)
         {
             this.LogService = logService;
         }
 
-        public List<Session> GetAll()
+        public List<User> GetAll()
         {
             using (var db = new SQLiteEFContext())
             {
-                return db.Sessions.ToList();
+                return db.Users.ToList();
             }
         }
 
-        public List<Session> GetAll(Func<Session, bool> predicate)
+        public List<User> GetAll(Func<User, bool> predicate)
         {
             using (var db = new SQLiteEFContext())
             {
-                return db.Sessions.Where(predicate).ToList();
+                return db.Users.Where(predicate).ToList();
             }
         }
 
-        public Session GetById(Guid id)
+        public User GetById(int id)
         {
             using (var db = new SQLiteEFContext())
             {
-                return db.Sessions.FirstOrDefault(session => session.Id == id);
+                return db.Users.FirstOrDefault(user => user.Id == id);
             }
         }
 
-        public bool Create(Session session)
+        public bool Create(User user)
         {
             using (var db = new SQLiteEFContext())
             {
-                db.Add(session);
+                db.Add(user);
                 db.SaveChanges();
                 return true;
             }
         }
 
-        public bool Update(Session session)
+        public bool Update(User user)
         {
             using (var db = new SQLiteEFContext())
             {
-                db.Update(session);
+                db.Update(user);
                 db.SaveChanges();
                 return true;
             }
         }
 
-        public bool Delete(Guid id)
+        public bool Delete(int id)
         {
             using (var db = new SQLiteEFContext())
             {
-                Session session = new Session();
-                session.Id = id;
+                User user = new User();
+                user.Id = id;
 
-                db.Remove(session);
+                db.Remove(user);
                 db.SaveChanges();
 
                 return true;

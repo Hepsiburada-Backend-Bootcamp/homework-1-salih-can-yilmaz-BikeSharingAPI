@@ -19,10 +19,10 @@ namespace BikeSharingAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly ILogService _LogService;
-        private readonly IUserService _UserService;
+        private readonly IUserRepository _UserService;
         private readonly IMapper _Mapper;
 
-        public UserController(ILogService logService, IUserService userService, IMapper mapper)
+        public UserController(ILogService logService, IUserRepository userService, IMapper mapper)
         {
             this._LogService = logService;
             this._UserService = userService;
@@ -34,7 +34,7 @@ namespace BikeSharingAPI.Controllers
         /// </summary>
         /// <returns>Json formatinda kullanici listesi.</returns>
         [HttpGet]
-        public IActionResult GetUserList()
+        public IActionResult GetUserList(string fields)
         {
             _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
