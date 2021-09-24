@@ -1,4 +1,6 @@
-﻿using BikeSharingAPI.Models.DTOs.Sessions;
+﻿using BikeSharingAPI.Enums;
+using BikeSharingAPI.Models;
+using BikeSharingAPI.Models.DTOs.Sessions;
 using BikeSharingAPI.Services.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,12 +16,12 @@ namespace BikeSharingAPI.Controllers
     public class SessionController : ControllerBase
     {
         private readonly ILogService LogService;
-        private readonly ISQLiteService SQLiteService;
+        private readonly ISessionService SessionService;
 
-        public SessionController(ILogService logService, ISQLiteService sQLiteService)
+        public SessionController(ILogService logService, ISessionService sessionService)
         {
             this.LogService = logService;
-            this.SQLiteService = sQLiteService;
+            this.SessionService = sessionService;
         }
 
         /// <summary>
@@ -29,7 +31,24 @@ namespace BikeSharingAPI.Controllers
         [HttpGet]
         public IActionResult GetSessionList()
         {
-            return Ok();
+            try
+            {
+                LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
+                List<SessionModel> sessionModel = SessionService.GetAll();
+
+                if (sessionModel != null && sessionModel.Count > 0)
+                {
+                    return Ok(sessionModel);
+                }
+                else
+                {
+                    return NotFound(SharedData.MessageSessionsNotFound);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
         }
 
         /// <summary>
@@ -41,7 +60,23 @@ namespace BikeSharingAPI.Controllers
         [HttpGet]
         public IActionResult GetSession([FromRoute] int id)
         {
-            return Ok();
+            try
+            {
+                List<SessionModel> sessionModel = SessionService.GetAll($"id = {id}");
+
+                if (sessionModel != null && sessionModel.Count > 0)
+                {
+                    return Ok(sessionModel);
+                }
+                else
+                {
+                    return NotFound(SharedData.MessageSessionNotFound);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
         }
 
         /// <summary>
@@ -54,7 +89,7 @@ namespace BikeSharingAPI.Controllers
             [FromBody] SessionCreateDTO sessionCreateDTO
             )
         {
-            if (SQLiteService.Write<SessionCreateDTO>("User", sessionCreateDTO))
+            if (SessionService.CreateSession(sessionCreateDTO))
             {
                 return NoContent();
             }

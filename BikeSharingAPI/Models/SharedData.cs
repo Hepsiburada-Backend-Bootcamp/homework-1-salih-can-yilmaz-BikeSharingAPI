@@ -8,7 +8,9 @@ namespace BikeSharingAPI.Models
         public static string LogMessageInsertSuccess = "Veriler veritabanına yazıldı!";
         public static string MessageUsersNotFound = "Kullanıcılar bulunamadı!";
         public static string MessageUserNotFound = "Kullanıcı bulunamadı!";
-             
+        public static string MessageSessionsNotFound = "Session bulunamadı!";
+        public static string MessageSessionNotFound = "Session bulunamadı!";
+
         #endregion
 
         public const string LogSeperator = "=======================================================================================================================================================================================";

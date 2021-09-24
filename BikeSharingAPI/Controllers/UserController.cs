@@ -17,12 +17,12 @@ namespace BikeSharingAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly ILogService LogService;
-        private readonly ISQLiteService SQLiteService;
-        
-        public UserController(ILogService logService, ISQLiteService sQLiteService)
+        private readonly IUserService UserService;
+
+        public UserController(ILogService logService, IUserService userService)
         {
             this.LogService = logService;
-            this.SQLiteService = sQLiteService;
+            this.UserService = userService;
         }
         /// <summary>
         /// Tum kullanicilarin bir listesini doner.
@@ -34,8 +34,7 @@ namespace BikeSharingAPI.Controllers
             try
             {
                 LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
-                List<UserModel> userModel = new List<UserModel>();
-                userModel = SQLiteService.GetAll<UserModel>("User");
+                List<UserModel> userModel = UserService.GetAll();
 
                 if(userModel != null && userModel.Count > 0)
                 {
@@ -63,8 +62,7 @@ namespace BikeSharingAPI.Controllers
         {
             try
             {
-                List<UserModel> userModel = new List<UserModel>();
-                userModel = SQLiteService.GetAll<UserModel>("User", $"id = {id}");
+                List<UserModel> userModel = UserService.GetAll($"id = {id}");
 
                 if(userModel != null && userModel.Count > 0)
                 {
@@ -91,7 +89,7 @@ namespace BikeSharingAPI.Controllers
             [FromBody]UserCreateDTO userCreateDTO
             )
         {
-            if(SQLiteService.Write<UserCreateDTO>("User", userCreateDTO))
+            if(UserService.CreateUser(userCreateDTO))
             {
                 return NoContent();
             }
