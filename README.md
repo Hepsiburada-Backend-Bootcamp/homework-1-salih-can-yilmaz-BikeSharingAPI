@@ -37,7 +37,7 @@ https://app.swaggerhub.com/apis-docs/SCY95/bike-sharing_api/v1
 ---
 #### API Key 
 Client should include the API Key with the Authorization header to be able to use the API. If no key or an unauthorized key is added to the header of the request, the HTTP status code 401 (Unauthorized) is returned.
-#### Content-type (_TODO_)
+#### Content-type (_TODO in the next versions_)
 ### Endpoints
 ---
 #### Query Parameters
