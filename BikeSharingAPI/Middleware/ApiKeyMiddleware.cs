@@ -16,6 +16,11 @@ namespace BikeSharingAPI.Middleware
             _next = next;
         }
 
+        /// <summary>
+        /// Request lifecycle buradan baslar ve en son olarak yine buradan cikar. Dolayisiyla burada API Key kontrolu eklenmistir.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns>401 if not authorized; 500 if there is an exception</returns>
         public async Task InvokeAsync(HttpContext context)
         {
             try
