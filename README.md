@@ -41,8 +41,7 @@ Client should include the API Key with the Authorization header to be able to us
 ### Endpoints
 ---
 #### Query Parameters
-Get metodu id parametresi verilmeden çalıştırıldığında resimdeki gibi tüm kullanıcıların listesini döner.
-
-- orderByParams parametresi, orderByParams="alan adı ASC, alan adı DESC, alan adı DESC,..." şeklinde birden fazla alana göre sıralama yapabilecek şekilde verilebilir.
-- filter parametresi, filter="Id != 1 AND Balance > 35" örneğindeki gibi kullanılabilir.
-- fields parametresi ile sadece istenen alanların çekilmesi sağlanabilir. Kullanım -> fields="Name,Surname,Balance" (Id alanı, fields ile belirtilmese bile zorunludur.)
+When the get method is run without the id parameter, it returns a list of all users as in the picture.
+- The orderByParams parameter can be given as orderByParams="field name ASC, field name DESC, field name DESC,..." so that it can sort by more than one field.
+- The filter parameter can be used as in the example filter="Id != 1 AND Balance > 35".
+- With the fields parameter, only the desired fields can be requested. Usage -> fields="Name,Surname,Balance" (Id field is required even if not specified with fields.)
