@@ -35,7 +35,7 @@ namespace BikeSharingAPI.Services
         {
             List<Session> sessionModel;
 
-            if (fields != "")
+            if (!String.IsNullOrWhiteSpace(fields))
             {
                 if (!fields.Split(',').Contains("Id"))
                 {
@@ -43,13 +43,13 @@ namespace BikeSharingAPI.Services
                     fields = "Id," + fields;
                 }
 
-                if (filter != "")
+                if (!String.IsNullOrWhiteSpace(filter))
                 {
                     sessionModel = _SessionRepository.GetAll(filter, fields.Split(','));
                 }
                 sessionModel = _SessionRepository.GetAll(fields.Split(','));
             }
-            else if (filter != "")
+            else if (!String.IsNullOrWhiteSpace(filter))
             {
                 sessionModel = _SessionRepository.GetAll(filter);
             }
@@ -60,7 +60,7 @@ namespace BikeSharingAPI.Services
 
             List<SessionReadDTO> sessionReadDTOs = _Mapper.Map<List<SessionReadDTO>>(sessionModel);
 
-            if (orderByParams != "")
+            if (!String.IsNullOrWhiteSpace(orderByParams))
             {
                 return sessionReadDTOs.OrderBy(orderByParams).ToList();
             }
