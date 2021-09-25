@@ -68,12 +68,18 @@ namespace BikeSharingAPI.Controllers
         /// <param name="id">Kullanici id'si</param>
         /// <returns>Eger bulursa, kullanici bilgileri json formatinda.</returns>
         [Route("{id}")]
+        [Route("{id}/Sessions")]
         [HttpGet]
         public IActionResult GetUser([FromRoute]int id)
         {
             _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
             try
             {
+                if (HttpContext.Request.Path.Value.Contains("/Sessions"))
+                {
+                    return RedirectToAction("GetSessionList", "Session", new { filter = $"UserId = {id}" });                    
+                }
+
                 UserReadDTO userReadDTO = _UserService.GetUser(id);
 
                 if(userReadDTO != null)
