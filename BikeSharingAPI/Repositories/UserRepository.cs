@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BikeSharingAPI.Helpers;
 
 namespace BikeSharingAPI.Services
 {
@@ -24,11 +25,27 @@ namespace BikeSharingAPI.Services
             }
         }
 
-        public List<User> GetAll(Func<User, bool> predicate)
+        public List<User> GetAll(Func<User, bool> wherePredicate)
         {
             using (var db = new SQLiteEFContext())
             {
-                return db.Users.Where(predicate).ToList();
+                return db.Users.Where(wherePredicate).ToList();
+            }
+        }
+
+        public List<User> GetAll(params string[] columns)
+        {
+            using (var db = new SQLiteEFContext())
+            {
+                return db.Users.SelectMembers(columns).ToList();
+            }
+        }
+
+        public List<User> GetAll(Func<User, bool> wherePredicate, params string[] columns)
+        {
+            using (var db = new SQLiteEFContext())
+            {
+                return db.Users.SelectMembers(columns).Where(wherePredicate).ToList();
             }
         }
 

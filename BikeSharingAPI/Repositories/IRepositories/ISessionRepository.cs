@@ -10,7 +10,9 @@ namespace BikeSharingAPI.Services.IServices
     public interface ISessionRepository
     {
         List<Session> GetAll();
-        List<Session> GetAll(Func<Session, bool> predicate);
+        List<Session> GetAll(Func<Session, bool> wherePredicate);
+        List<Session> GetAll(params string[] columns);
+        List<Session> GetAll(Func<Session, bool> wherePredicate, params string[] columns);
         Session GetById(Guid id);
         bool Create(Session session);
         bool Update(Session session);

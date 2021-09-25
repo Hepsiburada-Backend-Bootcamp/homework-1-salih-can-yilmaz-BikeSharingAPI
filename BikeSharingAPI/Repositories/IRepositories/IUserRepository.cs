@@ -11,6 +11,8 @@ namespace BikeSharingAPI.Services.IServices
     {
         List<User> GetAll();
         List<User> GetAll(Func<User, bool> wherePredicate);
+        List<User> GetAll(params string[] columns);
+        List<User> GetAll(Func<User, bool> wherePredicate, params string[] columns);
         User GetById(int id);
         bool Create(User user);
         bool Update(User user);

@@ -18,14 +18,12 @@ namespace BikeSharingAPI.Controllers
     public class SessionController : ControllerBase
     {
         private readonly ILogService _LogService;
-        private readonly ISessionRepository _SessionService;
-        private readonly IMapper _Mapper;
+        private readonly ISessionService _SessionService;
 
-        public SessionController(ILogService logService, ISessionRepository sessionService, IMapper mapper)
+        public SessionController(ILogService logService, ISessionService sessionService)
         {
             this._LogService = logService;
             this._SessionService = sessionService;
-            this._Mapper = mapper;
         }
 
         /// <summary>
@@ -33,13 +31,15 @@ namespace BikeSharingAPI.Controllers
         /// </summary>
         /// <returns>Json formatinda kullanici listesi.</returns>
         [HttpGet]
-        public IActionResult GetSessionList()
+        public IActionResult GetSessionList(
+            string fields = ""
+            )
         {
             _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
             try
             {
-                List<Session> sessionModel = _SessionService.GetAll();
+                List<SessionReadDTO> sessionModel = _SessionService.GetSessions(fields);
 
                 if (sessionModel != null && sessionModel.Count > 0)
                 {
@@ -69,7 +69,7 @@ namespace BikeSharingAPI.Controllers
 
             try
             {
-                Session sessionModel = _SessionService.GetById(id);
+                SessionReadDTO sessionModel = _SessionService.GetSession(id);
 
                 if (sessionModel != null)
                 {
@@ -98,9 +98,7 @@ namespace BikeSharingAPI.Controllers
         {
             _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            Session session = _Mapper.Map<Session>(sessionCreateDTO);
-
-            if (_SessionService.Create(session))
+            if (_SessionService.CreateSession(sessionCreateDTO))
             {
                 return NoContent();
             }
@@ -117,13 +115,11 @@ namespace BikeSharingAPI.Controllers
         /// <param name="sessionUpdateDTO"></param>
         /// <returns>if succeeds 204; if fails 400 or 500</returns>
         [HttpPut]
-        public IActionResult PutSession([FromBody]Session sessionUpdateDTO)
+        public IActionResult PutSession([FromBody]SessionUpdateDTO sessionUpdateDTO)
         {
             _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            Session session = _Mapper.Map<Session>(sessionUpdateDTO);
-
-            if (_SessionService.Update(session))
+            if (_SessionService.UpdateSession(sessionUpdateDTO, true))
             {
                 return NoContent();
             }
@@ -143,26 +139,7 @@ namespace BikeSharingAPI.Controllers
         {
             _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            Session session = _SessionService.GetById(sessionUpdateDTO.Id);
-
-            if (session == null)
-            {
-                return NotFound();
-            }
-
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.CreateMap<SessionUpdateDTO, Session>();
-                cfg.ForAllPropertyMaps(
-                    pm => pm.TypeMap.SourceType == typeof(SessionUpdateDTO),
-                        (pm, c) => c.MapFrom(new IgnoreNullResolver(), pm.SourceMember.Name));
-            });
-
-            IMapper iMapper = config.CreateMapper();
-
-            session = iMapper.Map(sessionUpdateDTO, session);
-
-            if (_SessionService.Update(session))
+            if (_SessionService.UpdateSession(sessionUpdateDTO))
             {
                 return NoContent();
             }
@@ -183,7 +160,7 @@ namespace BikeSharingAPI.Controllers
         {
             _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            _SessionService.Delete(id);
+            _SessionService.DeleteSession(id);
 
             return Ok();
         }

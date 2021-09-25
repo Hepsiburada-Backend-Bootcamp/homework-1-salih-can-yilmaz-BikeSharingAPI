@@ -12,6 +12,6 @@ namespace BikeSharingAPI.Models.DTOs.Users
         public DateTime? DateJoined { get; set; }
         public string EMail { get; set; }
         public string PhoneNumber { get; set; }
-        public float? Balance { get; set; }
+        public double? Balance { get; set; }
     }
 }

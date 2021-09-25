@@ -1,4 +1,5 @@
-﻿using BikeSharingAPI.Models;
+﻿using BikeSharingAPI.Helpers;
+using BikeSharingAPI.Models;
 using BikeSharingAPI.Models.DTOs.Sessions;
 using BikeSharingAPI.Services.IServices;
 using System;
@@ -24,11 +25,27 @@ namespace BikeSharingAPI.Services
             }
         }
 
-        public List<Session> GetAll(Func<Session, bool> predicate)
+        public List<Session> GetAll(Func<Session, bool> wherePredicate)
         {
             using (var db = new SQLiteEFContext())
             {
-                return db.Sessions.Where(predicate).ToList();
+                return db.Sessions.Where(wherePredicate).ToList();
+            }
+        }
+
+        public List<Session> GetAll(params string[] columns)
+        {
+            using (var db = new SQLiteEFContext())
+            {
+                return db.Sessions.SelectMembers(columns).ToList();
+            }
+        }
+
+        public List<Session> GetAll(Func<Session, bool> wherePredicate, params string[] columns)
+        {
+            using (var db = new SQLiteEFContext())
+            {
+                return db.Sessions.SelectMembers(columns).Where(wherePredicate).ToList();
             }
         }
 

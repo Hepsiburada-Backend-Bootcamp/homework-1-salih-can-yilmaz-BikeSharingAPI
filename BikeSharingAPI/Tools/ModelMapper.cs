@@ -13,17 +13,13 @@ namespace BikeSharingAPI.Tools
     {
         public ModelMapper()
         {
-
             CreateMap<UserCreateDTO, User>();
             CreateMap<User, UserReadDTO>();
             CreateMap<UserUpdateDTO, User>();
-            CreateMap<UserDeleteDTO, User>();
 
             CreateMap<SessionCreateDTO, Session>();
             CreateMap<Session, SessionReadDTO>();
             CreateMap<SessionUpdateDTO, Session>();
-            CreateMap<SessionDeleteDTO, Session>();
-
         }
     }
 }
