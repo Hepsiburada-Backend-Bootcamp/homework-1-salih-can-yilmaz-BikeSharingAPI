@@ -31,13 +31,27 @@ namespace BikeSharingAPI.Services
             return userReadDTO;            
         }
 
-        public List<UserReadDTO> GetUsers(string orderByParams, string fields) 
+        public List<UserReadDTO> GetUsers(string filter, string orderByParams, string fields) 
         {
             List<User> userModel;
 
             if (fields != "")
             {
+                if(!fields.Split(',').Contains("Id"))
+                {
+
+                    fields = "Id," + fields;
+                }
+
+                if(filter != "")
+                {
+                    userModel = _UserRepository.GetAll(filter, fields.Split(','));
+                }
                 userModel = _UserRepository.GetAll(fields.Split(','));
+            }
+            else if (filter != "")
+            {
+                userModel = _UserRepository.GetAll(filter);
             }
             else
             {

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BikeSharingAPI.Tools;
+using BikeSharingAPI.Helpers;
 
 namespace BikeSharingAPI.Services
 {
@@ -30,13 +31,27 @@ namespace BikeSharingAPI.Services
             return sessionReadDTO;
         }
 
-        public List<SessionReadDTO> GetSessions(string orderByParams, string fields)
+        public List<SessionReadDTO> GetSessions(string filter, string orderByParams, string fields)
         {
             List<Session> sessionModel;
 
             if (fields != "")
             {
+                if (!fields.Split(',').Contains("Id"))
+                {
+
+                    fields = "Id," + fields;
+                }
+
+                if (filter != "")
+                {
+                    sessionModel = _SessionRepository.GetAll(filter, fields.Split(','));
+                }
                 sessionModel = _SessionRepository.GetAll(fields.Split(','));
+            }
+            else if (filter != "")
+            {
+                sessionModel = _SessionRepository.GetAll(filter);
             }
             else
             {

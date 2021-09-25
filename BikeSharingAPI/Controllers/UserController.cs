@@ -34,6 +34,7 @@ namespace BikeSharingAPI.Controllers
         /// <returns>Json formatinda kullanici listesi.</returns>
         [HttpGet]
         public IActionResult GetUserList(
+            string filter = "",
             string orderByParams = "",
             string fields = ""
             )
@@ -42,7 +43,7 @@ namespace BikeSharingAPI.Controllers
 
             try
             {
-                List<UserReadDTO> userReadDTOs = _UserService.GetUsers(orderByParams, fields);
+                List<UserReadDTO> userReadDTOs = _UserService.GetUsers(filter, orderByParams, fields);
 
                 if(userReadDTOs != null && userReadDTOs.Count > 0)
                 {

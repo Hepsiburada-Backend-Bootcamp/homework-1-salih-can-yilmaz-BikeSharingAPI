@@ -10,13 +10,9 @@ namespace BikeSharingAPI.Services.IServices
     public interface IUserRepository
     {
         List<User> GetAll();
-        List<User> GetAll(Func<User, bool> wherePredicate);
         List<User> GetAll(params string[] columns);
-        List<User> GetAll(Func<User, bool> wherePredicate, params string[] columns);
-        List<User> GetAll(string orderByParams);
-        List<User> GetAll(Func<User, bool> wherePredicate, string orderByParams);
-        List<User> GetAll(string orderByParams, params string[] columns);
-        List<User> GetAll(Func<User, bool> wherePredicate, string orderByParams, params string[] columns);
+        List<User> GetAll(string filter);
+        List<User> GetAll(string filter, params string[] columns);
         User GetById(int id);
         bool Create(User user);
         bool Update(User user);

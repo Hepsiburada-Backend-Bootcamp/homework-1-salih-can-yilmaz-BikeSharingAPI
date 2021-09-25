@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BikeSharingAPI.Helpers;
+using System.Linq.Dynamic.Core;
 
 namespace BikeSharingAPI.Services
 {
@@ -25,14 +26,6 @@ namespace BikeSharingAPI.Services
             }
         }
 
-        public List<User> GetAll(Func<User, bool> wherePredicate)
-        {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Users.Where(wherePredicate).ToList();
-            }
-        }
-
         public List<User> GetAll(params string[] columns)
         {
             using (var db = new SQLiteEFContext())
@@ -40,44 +33,19 @@ namespace BikeSharingAPI.Services
                 return db.Users.SelectMembers(columns).ToList();
             }
         }
-
-        public List<User> GetAll(Func<User, bool> wherePredicate, params string[] columns)
+        public List<User> GetAll(string filter)
         {
             using (var db = new SQLiteEFContext())
             {
-                return db.Users.SelectMembers(columns).Where(wherePredicate).ToList();
+                return db.Users.Where(filter).ToList();
             }
         }
 
-        public List<User> GetAll(string orderByParams)
+        public List<User> GetAll(string filter, params string[] columns)
         {
             using (var db = new SQLiteEFContext())
             {
-                return db.Users.OrderBy(orderByParams).ToList();
-            }
-        }
-
-        public List<User> GetAll(Func<User, bool> wherePredicate, string orderByParams)
-        {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Users.Where(wherePredicate).OrderBy(orderByParams).ToList();
-            }
-        }
-
-        public List<User> GetAll(string orderByParams, params string[] columns)
-        {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Users.SelectMembers(columns).OrderBy(orderByParams).ToList();
-            }
-        }
-
-        public List<User> GetAll(Func<User, bool> wherePredicate, string orderByParams, params string[] columns)
-        {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Users.SelectMembers(columns).Where(wherePredicate).OrderBy(orderByParams).ToList();
+                return db.Users.Where(filter).SelectMembers(columns).ToList();
             }
         }
 

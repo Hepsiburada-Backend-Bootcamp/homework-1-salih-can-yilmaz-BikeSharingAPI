@@ -5,6 +5,7 @@ using BikeSharingAPI.Services.IServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 
 namespace BikeSharingAPI.Services
@@ -25,14 +26,6 @@ namespace BikeSharingAPI.Services
             }
         }
 
-        public List<Session> GetAll(Func<Session, bool> wherePredicate)
-        {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Sessions.Where(wherePredicate).ToList();
-            }
-        }
-
         public List<Session> GetAll(params string[] columns)
         {
             using (var db = new SQLiteEFContext())
@@ -41,52 +34,28 @@ namespace BikeSharingAPI.Services
             }
         }
 
-        public List<Session> GetAll(Func<Session, bool> wherePredicate, params string[] columns)
+        public List<Session> GetAll(string filter)
         {
             using (var db = new SQLiteEFContext())
             {
-                return db.Sessions.SelectMembers(columns).Where(wherePredicate).ToList();
+                return db.Sessions.Where(filter).ToList();
             }
         }
 
-        public List<Session> GetAll(string orderByParams)
+        public List<Session> GetAll(string filter, params string[] columns)
         {
             using (var db = new SQLiteEFContext())
             {
-                return db.Sessions.OrderBy(orderByParams).ToList();
-            }
-        }
-
-        public List<Session> GetAll(Func<Session, bool> wherePredicate, string orderByParams)
-        {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Sessions.Where(wherePredicate).OrderBy(orderByParams).ToList();
-            }
-        }
-
-        public List<Session> GetAll(string orderByParams, params string[] columns)
-        {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Sessions.SelectMembers(columns).OrderBy(orderByParams).ToList();
-            }
-        }
-
-        public List<Session> GetAll(Func<Session, bool> wherePredicate, string orderByParams, params string[] columns)
-        {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Sessions.SelectMembers(columns).Where(wherePredicate).OrderBy(orderByParams).ToList();
+                return db.Sessions.Where(filter).SelectMembers(columns).ToList();
             }
         }
 
 
-        public Session GetById(Guid id)
+        public Session GetById(Guid Id)
         {
             using (var db = new SQLiteEFContext())
             {
-                return db.Sessions.FirstOrDefault(session => session.Id == id);
+                return db.Sessions.FirstOrDefault(session => session.Id == Id);
             }
         }
 
@@ -110,12 +79,12 @@ namespace BikeSharingAPI.Services
             }
         }
 
-        public bool Delete(Guid id)
+        public bool Delete(Guid Id)
         {
             using (var db = new SQLiteEFContext())
             {
                 Session session = new Session();
-                session.Id = id;
+                session.Id = Id;
 
                 db.Remove(session);
                 db.SaveChanges();
