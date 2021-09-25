@@ -30,6 +30,9 @@ Everything related to databases such as connecting to databases, querying databa
 SQLite is choosen for it's ability to initialize a database from scratch quickly on every build. Database consists of two tables: Users and Sessions. (one-to-many)
 ## Manual
 ---
+### Swagger Documentation
+---
+https://app.swaggerhub.com/apis-docs/SCY95/bike-sharing_api/v1
 ### Headers
 ---
 #### API Key 
