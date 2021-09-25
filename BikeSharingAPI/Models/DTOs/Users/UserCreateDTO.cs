@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using BikeSharingAPI.Enums;
 
 namespace BikeSharingAPI.Models.DTOs.Users
@@ -11,7 +12,9 @@ namespace BikeSharingAPI.Models.DTOs.Users
         public DateTime? BirthDate { get; set; }
         public DateTime? DateJoined { get; set; }
         public string EMail { get; set; }
+        [MaxLength(15)]
         public string PhoneNumber { get; set; }
+        [Range(0, Double.MaxValue)]
         public double? Balance { get; set; }
     }
 }
