@@ -49,6 +49,38 @@ namespace BikeSharingAPI.Services
             }
         }
 
+        public List<User> GetAll(string orderByParams)
+        {
+            using (var db = new SQLiteEFContext())
+            {
+                return db.Users.OrderBy(orderByParams).ToList();
+            }
+        }
+
+        public List<User> GetAll(Func<User, bool> wherePredicate, string orderByParams)
+        {
+            using (var db = new SQLiteEFContext())
+            {
+                return db.Users.Where(wherePredicate).OrderBy(orderByParams).ToList();
+            }
+        }
+
+        public List<User> GetAll(string orderByParams, params string[] columns)
+        {
+            using (var db = new SQLiteEFContext())
+            {
+                return db.Users.SelectMembers(columns).OrderBy(orderByParams).ToList();
+            }
+        }
+
+        public List<User> GetAll(Func<User, bool> wherePredicate, string orderByParams, params string[] columns)
+        {
+            using (var db = new SQLiteEFContext())
+            {
+                return db.Users.SelectMembers(columns).Where(wherePredicate).OrderBy(orderByParams).ToList();
+            }
+        }
+
         public User GetById(int id)
         {
             using (var db = new SQLiteEFContext())

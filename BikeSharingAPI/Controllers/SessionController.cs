@@ -32,6 +32,7 @@ namespace BikeSharingAPI.Controllers
         /// <returns>Json formatinda kullanici listesi.</returns>
         [HttpGet]
         public IActionResult GetSessionList(
+            string orderByParams = "",
             string fields = ""
             )
         {
@@ -39,7 +40,7 @@ namespace BikeSharingAPI.Controllers
 
             try
             {
-                List<SessionReadDTO> sessionModel = _SessionService.GetSessions(fields);
+                List<SessionReadDTO> sessionModel = _SessionService.GetSessions(orderByParams, fields);
 
                 if (sessionModel != null && sessionModel.Count > 0)
                 {

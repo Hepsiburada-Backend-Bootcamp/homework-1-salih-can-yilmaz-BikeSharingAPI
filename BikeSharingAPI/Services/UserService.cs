@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using BikeSharingAPI.Tools;
+using BikeSharingAPI.Helpers;
 
 namespace BikeSharingAPI.Services
 {
@@ -30,7 +31,7 @@ namespace BikeSharingAPI.Services
             return userReadDTO;            
         }
 
-        public List<UserReadDTO> GetUsers(string fields) 
+        public List<UserReadDTO> GetUsers(string orderByParams, string fields) 
         {
             List<User> userModel;
 
@@ -45,6 +46,10 @@ namespace BikeSharingAPI.Services
 
             List<UserReadDTO> userReadDTOs = _Mapper.Map<List<UserReadDTO>>(userModel);
 
+            if(orderByParams != "")
+            {
+                return userReadDTOs.OrderBy(orderByParams).ToList();
+            }
 
             return userReadDTOs;
         }

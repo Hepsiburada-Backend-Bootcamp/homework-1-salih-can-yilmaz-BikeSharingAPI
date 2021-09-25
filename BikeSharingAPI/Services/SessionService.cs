@@ -30,7 +30,7 @@ namespace BikeSharingAPI.Services
             return sessionReadDTO;
         }
 
-        public List<SessionReadDTO> GetSessions(string fields)
+        public List<SessionReadDTO> GetSessions(string orderByParams, string fields)
         {
             List<Session> sessionModel;
 
@@ -45,6 +45,10 @@ namespace BikeSharingAPI.Services
 
             List<SessionReadDTO> sessionReadDTOs = _Mapper.Map<List<SessionReadDTO>>(sessionModel);
 
+            if (orderByParams != "")
+            {
+                return sessionReadDTOs.OrderBy(orderByParams).ToList();
+            }
 
             return sessionReadDTOs;
         }

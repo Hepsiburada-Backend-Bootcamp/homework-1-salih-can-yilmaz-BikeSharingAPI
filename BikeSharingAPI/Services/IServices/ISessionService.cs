@@ -10,7 +10,7 @@ namespace BikeSharingAPI.Services.IServices
     public interface ISessionService
     {
         public SessionReadDTO GetSession(Guid Id);
-        public List<SessionReadDTO> GetSessions(string fields);
+        public List<SessionReadDTO> GetSessions(string orderByParams, string fields);
         public bool CreateSession(SessionCreateDTO sessionCreateDTO);
         bool UpdateSession(SessionUpdateDTO sessionUpdateDTO, bool setNullsToDefaults = false);
         public bool DeleteSession(Guid Id);

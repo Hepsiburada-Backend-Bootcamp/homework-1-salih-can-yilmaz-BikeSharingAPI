@@ -13,6 +13,10 @@ namespace BikeSharingAPI.Services.IServices
         List<Session> GetAll(Func<Session, bool> wherePredicate);
         List<Session> GetAll(params string[] columns);
         List<Session> GetAll(Func<Session, bool> wherePredicate, params string[] columns);
+        List<Session> GetAll(string orderByParams);
+        List<Session> GetAll(Func<Session, bool> wherePredicate, string orderByParams);
+        List<Session> GetAll(string orderByParams, params string[] columns);
+        List<Session> GetAll(Func<Session, bool> wherePredicate, string orderByParams, params string[] columns);
         Session GetById(Guid id);
         bool Create(Session session);
         bool Update(Session session);
