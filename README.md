@@ -18,7 +18,7 @@ Dynamic Linq is used for dynamic query parameters.
 The application is developed using onion architecture. It is done to lower coupling and make codes cleaner. The application consists of three main layers, the Service layer, wrapped by the Repository layer, and both wrapped by the Network layer. 
 ### Network Layer.
 ---
-Controllers are the main actors on this layer and they are responsible for routing of requests and responses. They are the first to recieve and map the data from a response and last to return the response.
+Controllers and Middlewares are the main actors on this layer and they are responsible for routing of requests and responses. They are the first to recieve and map the data from a response and last to return the response.
 ### Service Layer
 ---
 This is where the data models and main logic of the application takes place. 
