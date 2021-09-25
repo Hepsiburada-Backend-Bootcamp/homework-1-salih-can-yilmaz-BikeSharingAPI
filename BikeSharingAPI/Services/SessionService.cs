@@ -43,8 +43,6 @@ namespace BikeSharingAPI.Services
                 sessionModel = _SessionRepository.GetAll();
             }
 
-
-
             List<SessionReadDTO> sessionReadDTOs = _Mapper.Map<List<SessionReadDTO>>(sessionModel);
 
 

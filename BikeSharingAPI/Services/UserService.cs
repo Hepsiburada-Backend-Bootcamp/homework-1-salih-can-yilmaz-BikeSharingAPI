@@ -43,8 +43,6 @@ namespace BikeSharingAPI.Services
                 userModel = _UserRepository.GetAll();
             }
 
-            
-
             List<UserReadDTO> userReadDTOs = _Mapper.Map<List<UserReadDTO>>(userModel);
 
 
