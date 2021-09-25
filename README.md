@@ -37,6 +37,12 @@ https://app.swaggerhub.com/apis-docs/SCY95/bike-sharing_api/v1
 ---
 #### API Key 
 Client should include the API Key with the Authorization header to be able to use the API. If no key or an unauthorized key is added to the header of the request, the HTTP status code 401 (Unauthorized) is returned.
+#### Content-type (_TODO_)
 ### Endpoints
 ---
 #### Query Parameters
+Get metodu id parametresi verilmeden çalıştırıldığında resimdeki gibi tüm kullanıcıların listesini döner.
+
+- orderByParams parametresi, orderByParams="alan adı ASC, alan adı DESC, alan adı DESC,..." şeklinde birden fazla alana göre sıralama yapabilecek şekilde verilebilir.
+- filter parametresi, filter="Id != 1 AND Balance > 35" örneğindeki gibi kullanılabilir.
+- fields parametresi ile sadece istenen alanların çekilmesi sağlanabilir. Kullanım -> fields="Name,Surname,Balance" (Id alanı, fields ile belirtilmese bile zorunludur.)
