@@ -33,7 +33,7 @@ SQLite is choosen for it's ability to initialize a database from scratch quickly
 ### Headers
 ---
 #### API Key 
-Client should include the API Key to be able to use the API. If no key or an unauthorized key is added to the header of the request, the HTTP status code 401 (Unauthorized) is returned.
+Client should include the API Key with the Authorization header to be able to use the API. If no key or an unauthorized key is added to the header of the request, the HTTP status code 401 (Unauthorized) is returned.
 ### Endpoints
 ---
 #### Query Parameters
