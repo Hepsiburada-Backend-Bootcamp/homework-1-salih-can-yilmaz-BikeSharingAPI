@@ -1,6 +1,6 @@
 # BikeSharingAPI
  ---
-BikeSharing API bir bisiklet kiralama şirketinin kullanıcıları ve bu kullanıcıların bisiklet kullanım kayıtları üzerinde işlem yapılmasına olanak verir.
+BikeSharing API enables to work with data of users of a bike sharing company and their cycling sessions.
 ## Technologies
 ---
 #### EntityFramework
