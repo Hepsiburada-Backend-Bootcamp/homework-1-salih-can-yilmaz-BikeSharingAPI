@@ -1,3 +1,4 @@
+using BikeSharingAPI.Middleware;
 using BikeSharingAPI.Services;
 using BikeSharingAPI.Services.IServices;
 using Microsoft.AspNetCore.Builder;
@@ -63,6 +64,8 @@ namespace BikeSharingAPI
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseMiddleware<ApiKeyMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
