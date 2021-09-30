@@ -13,82 +13,60 @@ namespace BikeSharingAPI.Services
     public class UserRepository : IUserRepository
     {
         private readonly ILogService LogService;
-        public UserRepository(ILogService logService)
+        private readonly SQLiteEFContext _sQLiteEFContext;
+        public UserRepository(ILogService logService, SQLiteEFContext sQLiteEFContext)
         {
             this.LogService = logService;
+            this._sQLiteEFContext = sQLiteEFContext;
         }
 
         public List<User> GetAll()
         {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Users.ToList();
-            }
+            return this._sQLiteEFContext.Users.ToList();
         }
 
         public List<User> GetAll(params string[] columns)
         {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Users.SelectMembers(columns).ToList();
-            }
+            return this._sQLiteEFContext.Users.SelectMembers(columns).ToList();
         }
         public List<User> GetAll(string filter)
         {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Users.Where(filter).ToList();
-            }
+            return this._sQLiteEFContext.Users.Where(filter).ToList();
         }
 
         public List<User> GetAll(string filter, params string[] columns)
         {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Users.Where(filter).SelectMembers(columns).ToList();
-            }
+            return this._sQLiteEFContext.Users.Where(filter).SelectMembers(columns).ToList();
         }
 
         public User GetById(int id)
         {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Users.FirstOrDefault(user => user.Id == id);
-            }
+            return this._sQLiteEFContext.Users.FirstOrDefault(user => user.Id == id);
         }
 
         public bool Create(User user)
         {
-            using (var db = new SQLiteEFContext())
-            {
-                db.Add(user);
-                db.SaveChanges();
-                return true;
-            }
+            this._sQLiteEFContext.Add(user);
+            this._sQLiteEFContext.SaveChanges();
+            return true;
         }
 
         public bool Update(User user)
         {
-            using (var db = new SQLiteEFContext())
-            {
-                db.Update(user);
-                db.SaveChanges();
-                return true;
-            }
+            this._sQLiteEFContext.Update(user);
+            this._sQLiteEFContext.SaveChanges();
+            return true;
         }
 
         public bool Delete(int id)
         {
-            using (var db = new SQLiteEFContext())
-            {
-                User user = new User();
-                user.Id = id;
+            User user = new User();
+            user.Id = id;
 
-                db.Remove(user);
-                db.SaveChanges();
+            this._sQLiteEFContext.Remove(user);
+            this._sQLiteEFContext.SaveChanges();
 
-                return true;
-            }
+            return true;
         }
     }
 }

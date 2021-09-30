@@ -45,8 +45,9 @@ namespace BikeSharingAPI
             services.AddScoped<ILogService, LogService>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISessionRepository, SessionRepository>();
-            services.AddScoped < IUserService, UserService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<ISessionService, SessionService>();
+            services.AddScoped<SQLiteEFContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

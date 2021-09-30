@@ -15,9 +15,9 @@ namespace BikeSharingAPI.Services
 
         public string DbPath { get; private set; }
 
-        public SQLiteEFContext()
+        public SQLiteEFContext(IConfiguration configuration)
         {
-            DbPath = "BikeSharingDB.db";
+            DbPath = configuration.GetConnectionString("SQLite");
         }
 
         // The following configures EF to create a Sqlite database file in the

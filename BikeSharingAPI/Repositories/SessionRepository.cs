@@ -10,87 +10,66 @@ using System.Threading.Tasks;
 
 namespace BikeSharingAPI.Services
 {
-    public class SessionRepository : ISessionRepository
+    public class SessionRepository : ISessionRepository//todo repository base and async methods, new ile turememesi lazim, her islemden sonra db.savechanges yapilmamali context icerisinde scoped olmasi lazim
     {
-        private readonly ILogService LogService;
-        public SessionRepository(ILogService logService)
+        private readonly ILogService _logService;
+        private readonly SQLiteEFContext _sQLiteEFContext;
+        public SessionRepository(ILogService logService, SQLiteEFContext sQLiteEFContext)
         {
-            this.LogService = logService;
+            this._logService = logService;
+            this._sQLiteEFContext = sQLiteEFContext;
         }
 
         public List<Session> GetAll()
         {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Sessions.ToList();
-            }
+            return this._sQLiteEFContext.Sessions.ToList();
+            
         }
 
         public List<Session> GetAll(params string[] columns)
         {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Sessions.SelectMembers(columns).ToList();
-            }
+            return this._sQLiteEFContext.Sessions.SelectMembers(columns).ToList();
         }
 
         public List<Session> GetAll(string filter)
         {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Sessions.Where(filter).ToList();
-            }
+            return this._sQLiteEFContext.Sessions.Where(filter).ToList();
         }
 
         public List<Session> GetAll(string filter, params string[] columns)
         {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Sessions.Where(filter).SelectMembers(columns).ToList();
-            }
+            return this._sQLiteEFContext.Sessions.Where(filter).SelectMembers(columns).ToList();
         }
 
 
         public Session GetById(Guid Id)
         {
-            using (var db = new SQLiteEFContext())
-            {
-                return db.Sessions.FirstOrDefault(session => session.Id == Id);
-            }
+            return this._sQLiteEFContext.Sessions.FirstOrDefault(session => session.Id == Id);
         }
 
         public bool Create(Session session)
         {
-            using (var db = new SQLiteEFContext())
-            {
-                db.Add(session);
-                db.SaveChanges();
-                return true;
-            }
+            this._sQLiteEFContext.Add(session);
+            this._sQLiteEFContext.SaveChanges();
+            return true;
         }
 
         public bool Update(Session session)
         {
-            using (var db = new SQLiteEFContext())
-            {
-                db.Update(session);
-                db.SaveChanges();
-                return true;
-            }
+            this._sQLiteEFContext.Update(session);
+            this._sQLiteEFContext.SaveChanges();
+            return true;
         }
 
         public bool Delete(Guid Id)
         {
-            using (var db = new SQLiteEFContext())
-            {
-                Session session = new Session();
-                session.Id = Id;
+            Session session = new Session();
+            session.Id = Id;
 
-                db.Remove(session);
-                db.SaveChanges();
+            this._sQLiteEFContext.Remove(session);
+            this._sQLiteEFContext.SaveChanges();
 
-                return true;
-            }
+            return true;
         }
     }
 }

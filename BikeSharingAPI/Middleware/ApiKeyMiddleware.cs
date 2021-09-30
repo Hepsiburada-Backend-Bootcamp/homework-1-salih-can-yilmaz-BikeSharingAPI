@@ -25,6 +25,13 @@ namespace BikeSharingAPI.Middleware
         {
             try
             {
+                
+                #if DEBUG
+                
+                    await _next(context);
+
+                #else
+
                 if (!context.Request.Headers.TryGetValue(APIKEYNAME, out var requestApiKey))
                 {
                     context.Response.StatusCode = 401;
@@ -40,6 +47,8 @@ namespace BikeSharingAPI.Middleware
                 {
                     await _next(context);
                 }
+
+                #endif
             }
             catch (System.Exception ex)
             {
