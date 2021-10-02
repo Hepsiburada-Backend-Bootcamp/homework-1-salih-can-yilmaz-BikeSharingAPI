@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using BikeSharingAPI.Enums;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +23,7 @@ namespace BikeSharingAPI.Helpers
                 {
                     case EnumResponseFormat.JSON:
                         if (!isRawData)
-                            content = JsonSerializer.Serialize(data);
+                            content = JsonSerializer.Serialize(data, new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull});
                         else
                             content = data.ToString();
 

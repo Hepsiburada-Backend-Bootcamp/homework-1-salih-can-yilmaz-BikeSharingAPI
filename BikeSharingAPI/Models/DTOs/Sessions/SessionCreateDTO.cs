@@ -14,7 +14,7 @@ namespace BikeSharingAPI.Models.DTOs.Sessions
         public EnumLocation? EndLocation { get; set; }
         [Range(-50, 50)]
         public double? Temperature { get; set; }
-        public bool IsHoliday { get; set; }
+        public bool? IsHoliday { get; set; }
         [Range(0, Double.MaxValue)]
         public double? Cost { get; set; }
         public string UserComment { get; set; }
