@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BikeSharingAPI.Enums;
+using BikeSharingAPI.Helpers;
 using BikeSharingAPI.Models;
 using BikeSharingAPI.Models.DTOs.Users;
 using BikeSharingAPI.Services;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace BikeSharingAPI.Controllers
@@ -45,20 +47,34 @@ namespace BikeSharingAPI.Controllers
             {
                 List<UserReadDTO> userReadDTOs = _UserService.GetUsers(filter, orderByParams, fields);
 
-                if(userReadDTOs != null && userReadDTOs.Count > 0)
+                if (userReadDTOs != null && userReadDTOs.Count > 0)
                 {
-                    return Ok(userReadDTOs);
+                    return HelperResponse.GenerateResponse(
+                        EnumResponseFormat.JSON,
+                        HttpStatusCode.OK,
+                        userReadDTOs
+                        );
                 }
                 else
                 {
-                    return NotFound(SharedData.MessageUsersNotFound);
+                    _LogService.Log(SharedData.MessageUsersNotFound, EnumLogLevel.ERROR);
+
+                    return HelperResponse.GenerateResponse(
+                        EnumResponseFormat.JSON,
+                        HttpStatusCode.NotFound,
+                        new ErrorModel { ErrorMessage = SharedData.MessageUsersNotFound }
+                        );
                 }
             }
-
             catch (Exception ex)
-
             {
-                return StatusCode(500);
+                _LogService.Log(ex.Message, EnumLogLevel.ERROR);
+
+                return HelperResponse.GenerateResponse(
+                    EnumResponseFormat.JSON,
+                    HttpStatusCode.InternalServerError,
+                    new ErrorModel { ErrorMessage = ex.Message }
+                    );
             }
         }
 
@@ -77,25 +93,39 @@ namespace BikeSharingAPI.Controllers
             {
                 if (HttpContext.Request.Path.Value.Contains("/Sessions"))
                 {
-                    return RedirectToAction("GetSessionList", "Session", new { filter = $"UserId = {id}" });                    
+                    return RedirectToAction("GetSessionList", "Session", new { filter = $"UserId = {id}" });
                 }
 
                 UserReadDTO userReadDTO = _UserService.GetUser(id);
 
-                if(userReadDTO != null)
+                if (userReadDTO != null)
                 {
-                    return Ok(userReadDTO);
+                    return HelperResponse.GenerateResponse(
+                        EnumResponseFormat.JSON,
+                        HttpStatusCode.OK,
+                        userReadDTO
+                        );
                 }
                 else
                 {
-                    return NotFound(SharedData.MessageUserNotFound);
+                    _LogService.Log(SharedData.MessageUserNotFound, EnumLogLevel.ERROR);
+
+                    return HelperResponse.GenerateResponse(
+                        EnumResponseFormat.JSON,
+                        HttpStatusCode.NotFound,
+                        new ErrorModel { ErrorMessage = SharedData.MessageUserNotFound }
+                        );
                 }
             }
             catch (Exception ex)
             {
                 _LogService.Log(ex.Message, EnumLogLevel.ERROR);
-                
-                return StatusCode(500);
+
+                return HelperResponse.GenerateResponse(
+                    EnumResponseFormat.JSON,
+                    HttpStatusCode.InternalServerError,
+                    new ErrorModel { ErrorMessage = ex.Message }
+                    );
             }
         }
 
@@ -113,12 +143,18 @@ namespace BikeSharingAPI.Controllers
 
             if (_UserService.CreateUser(userCreateDTO))
             {
-                return NoContent();
+                return HelperResponse.GenerateResponse(HttpStatusCode.NoContent);
             }
             else
             {
-                return StatusCode(500);
-            }            
+                _LogService.Log(SharedData.MessageCantCreateUser, EnumLogLevel.ERROR);
+
+                return HelperResponse.GenerateResponse(
+                    EnumResponseFormat.JSON,
+                    HttpStatusCode.InternalServerError,
+                    new ErrorModel { ErrorMessage = SharedData.MessageCantCreateUser }
+                    );
+            }
         }
 
         /// <summary>
@@ -132,13 +168,19 @@ namespace BikeSharingAPI.Controllers
         {
             _LogService.Log(SharedData.LogMessageRequestReceived, EnumLogLevel.INFORMATION);
 
-            if(_UserService.UpdateUser(userUpdateDTO, true))
+            if (_UserService.UpdateUser(userUpdateDTO, true))
             {
-                return NoContent();
+                return HelperResponse.GenerateResponse(HttpStatusCode.NoContent);
             }
             else
             {
-                return StatusCode(500);
+                _LogService.Log(SharedData.MessageCantUpdateUser, EnumLogLevel.ERROR);
+
+                return HelperResponse.GenerateResponse(
+                    EnumResponseFormat.JSON,
+                    HttpStatusCode.InternalServerError,
+                    new ErrorModel { ErrorMessage = SharedData.MessageCantUpdateUser }
+                    );
             }
         }
 
@@ -154,11 +196,17 @@ namespace BikeSharingAPI.Controllers
 
             if (_UserService.UpdateUser(userUpdateDTO))
             {
-                return NoContent();
+                return HelperResponse.GenerateResponse(HttpStatusCode.NoContent);
             }
             else
             {
-                return StatusCode(500);
+                _LogService.Log(SharedData.MessageCantUpdateUser, EnumLogLevel.ERROR);
+
+                return HelperResponse.GenerateResponse(
+                    EnumResponseFormat.JSON,
+                    HttpStatusCode.InternalServerError,
+                    new ErrorModel { ErrorMessage = SharedData.MessageCantUpdateUser }
+                    );
             }
         }
 
@@ -175,7 +223,7 @@ namespace BikeSharingAPI.Controllers
 
             _UserService.DeleteUser(id);
 
-            return Ok();
+            return HelperResponse.GenerateResponse(HttpStatusCode.NoContent);
         }
     }
 }

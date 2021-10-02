@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BikeSharingAPI.Enums;
+using BikeSharingAPI.Helpers;
 using BikeSharingAPI.Models;
 using BikeSharingAPI.Models.DTOs.Sessions;
 using BikeSharingAPI.Services.IServices;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace BikeSharingAPI.Controllers
@@ -41,20 +43,35 @@ namespace BikeSharingAPI.Controllers
 
             try
             {
-                List<SessionReadDTO> sessionModel = _SessionService.GetSessions(filter, orderByParams, fields);
-
-                if (sessionModel != null && sessionModel.Count > 0)
+                List<SessionReadDTO> sessionReadDTOs = _SessionService.GetSessions(filter, orderByParams, fields);
+                if (sessionReadDTOs != null && sessionReadDTOs.Count > 0)
                 {
-                    return Ok(sessionModel);
+                    return HelperResponse.GenerateResponse(
+                        EnumResponseFormat.JSON,
+                        HttpStatusCode.OK,
+                        sessionReadDTOs
+                        );
                 }
                 else
                 {
-                    return NotFound(SharedData.MessageSessionsNotFound);
+                    _LogService.Log(SharedData.MessageSessionsNotFound, EnumLogLevel.ERROR);
+
+                    return HelperResponse.GenerateResponse(
+                        EnumResponseFormat.JSON,
+                        HttpStatusCode.NotFound,
+                        new ErrorModel { ErrorMessage = SharedData.MessageSessionsNotFound }
+                        );
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                _LogService.Log(ex.Message, EnumLogLevel.ERROR);
+
+                return HelperResponse.GenerateResponse(
+                    EnumResponseFormat.JSON,
+                    HttpStatusCode.InternalServerError,
+                    new ErrorModel { ErrorMessage = ex.Message }
+                    );
             }
         }
 
@@ -71,20 +88,36 @@ namespace BikeSharingAPI.Controllers
 
             try
             {
-                SessionReadDTO sessionModel = _SessionService.GetSession(id);
+                SessionReadDTO sessionReadDTO = _SessionService.GetSession(id);
 
-                if (sessionModel != null)
+                if (sessionReadDTO != null)
                 {
-                    return Ok(sessionModel);
+                    return HelperResponse.GenerateResponse(
+                        EnumResponseFormat.JSON,
+                        HttpStatusCode.OK,
+                        sessionReadDTO
+                        );
                 }
                 else
                 {
-                    return NotFound(SharedData.MessageSessionNotFound);
+                    _LogService.Log(SharedData.MessageSessionNotFound, EnumLogLevel.ERROR);
+
+                    return HelperResponse.GenerateResponse(
+                        EnumResponseFormat.JSON,
+                        HttpStatusCode.NotFound,
+                        new ErrorModel { ErrorMessage = SharedData.MessageSessionNotFound }
+                        );
                 }
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                _LogService.Log(ex.Message, EnumLogLevel.ERROR);
+
+                return HelperResponse.GenerateResponse(
+                    EnumResponseFormat.JSON,
+                    HttpStatusCode.InternalServerError,
+                    new ErrorModel { ErrorMessage = ex.Message }
+                    );
             }
         }
 
@@ -102,11 +135,17 @@ namespace BikeSharingAPI.Controllers
 
             if (_SessionService.CreateSession(sessionCreateDTO))
             {
-                return NoContent();
+                return HelperResponse.GenerateResponse(HttpStatusCode.NoContent);
             }
             else
             {
-                return StatusCode(500);
+                _LogService.Log(SharedData.MessageCantCreateSession, EnumLogLevel.ERROR);
+
+                return HelperResponse.GenerateResponse(
+                    EnumResponseFormat.JSON,
+                    HttpStatusCode.InternalServerError,
+                    new ErrorModel { ErrorMessage = SharedData.MessageCantCreateSession }
+                    );
             }
         }
 
@@ -123,11 +162,17 @@ namespace BikeSharingAPI.Controllers
 
             if (_SessionService.UpdateSession(sessionUpdateDTO, true))
             {
-                return NoContent();
+                return HelperResponse.GenerateResponse(HttpStatusCode.NoContent);
             }
             else
             {
-                return StatusCode(500);
+                _LogService.Log(SharedData.MessageCantUpdateSession, EnumLogLevel.ERROR);
+
+                return HelperResponse.GenerateResponse(
+                    EnumResponseFormat.JSON,
+                    HttpStatusCode.InternalServerError,
+                    new ErrorModel { ErrorMessage = SharedData.MessageCantUpdateSession }
+                    );
             }
         }
 
@@ -143,11 +188,17 @@ namespace BikeSharingAPI.Controllers
 
             if (_SessionService.UpdateSession(sessionUpdateDTO))
             {
-                return NoContent();
+                return HelperResponse.GenerateResponse(HttpStatusCode.NoContent);
             }
             else
             {
-                return StatusCode(500);
+                _LogService.Log(SharedData.MessageCantUpdateSession, EnumLogLevel.ERROR);
+
+                return HelperResponse.GenerateResponse(
+                    EnumResponseFormat.JSON,
+                    HttpStatusCode.InternalServerError,
+                    new ErrorModel { ErrorMessage = SharedData.MessageCantUpdateSession }
+                    );
             }
         }
 
@@ -164,7 +215,7 @@ namespace BikeSharingAPI.Controllers
 
             _SessionService.DeleteSession(id);
 
-            return Ok();
+            return HelperResponse.GenerateResponse(HttpStatusCode.NoContent);
         }
     }
 }
